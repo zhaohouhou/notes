@@ -1,0 +1,214 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{amsmath,amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{CJK}    % chinese character
+\usepackage{dsfont}  % \mathds{}
+\usepackage{amssymb}  %  \mathbb{}
+
+% ----------------------------------------------------------------
+\begin{document}
+
+\title{Neural Networks: Representation - Applications}%
+\author{Di Zhao, 2016-4-9}%
+\date{\small{\texttt{zhaodi01@mail.ustc.edu.cn}}}%
+% ----------------------------------------------------------------
+
+\maketitle
+% ----------------------------------------------------------------
+
+\begin{CJK*}{GBK}{song}
+
+\section{Non-linear classification example: XOR/XNOR}
+
+$x_1,x_2 \in \{0,1\}$, 实现函数:
+
+$y=x_1\ \textbf{XOR}\ x_2$, 
+
+$y=x_1\ \textbf{NXOR}\ x_2\ =\ NOT(x_1\ \textbf{XOR}\ x_2)$
+
+\subsection{example: AND}
+
+已知sigmoid function的特点：当$z\geqslant4.0$时$g(z)\approx 1.0$，当
+$z\leqslant-4.0$时$g(z)\approx 0$。
+
+构建两层的Nuron（input和output），第二层只有$a_1^{(1)}$一个节点。
+且$\Theta_1^{(1)}=[-30, 20, 20]^T$。则
+$h_{\Theta}(x)\ =\ g(-30 + 20x_1 + 20x_2)$。（Figure 1）
+
+\begin{figure*}[h] %h : float- current position
+    \begin{minipage}{0.65\linewidth}
+      % Requires \usepackage{graphicx}
+      \includegraphics{example_AND.png}\\
+      \caption{AND function}\label{fig:digit}
+    \end{minipage}
+    \begin{minipage}{0.25\linewidth}
+        可以得到真值表\\\\
+        \begin{tabular}{cc|c|c}
+          $x_1$     &    $x_2$    &      $z$     &   $h_{\Theta}(x)$    \\
+          \hline
+          0 & 0 & -30 & $\thickapprox 0$\\
+          0 & 1 & -10 & $\thickapprox 0$\\
+          1 & 0 & -10 & $\thickapprox 0$\\
+          1 & 1 & 10 & $\thickapprox 1$\\
+        \end{tabular}\\
+    \end{minipage}
+\end{figure*}
+
+从真值表可以看出，通过图1的神经网络实现了一个\textbf{AND}函数。
+
+\subsection{example: OR}
+
+类似地，可以构造\textbf{OR}函数：
+
+\clearpage
+
+\begin{figure*}[h] %h : float- current position
+    \begin{minipage}{0.65\linewidth}
+      % Requires \usepackage{graphicx}
+      \includegraphics{example_OR.png}\\
+      \caption{OR function}\label{fig:digit}
+    \end{minipage}
+    \begin{minipage}{0.25\linewidth}
+        \begin{tabular}{cc|c|c}
+          $x_1$     &    $x_2$    &      $z$     &   $h_{\Theta}(x)$    \\
+          \hline
+          0 & 0 & -10 & $\thickapprox 0$\\
+          0 & 1 & 10 & $\thickapprox 1$\\
+          1 & 0 & 10 & $\thickapprox 1$\\
+          1 & 1 & 30 & $\thickapprox 1$\\
+        \end{tabular}\\
+    \end{minipage}
+\end{figure*}
+
+从真值表可以看出，通过图2的神经网络实现了一个\textbf{OR}函数。
+
+
+\subsection{example: NOT}
+
+函数NOT的构造：
+
+\begin{figure*}[h] %h : float- current position
+    \begin{minipage}{0.65\linewidth}
+      % Requires \usepackage{graphicx}
+      \includegraphics{example_NOT.png}\\
+      \caption{NOT function}\label{fig:digit}
+    \end{minipage}
+    \begin{minipage}{0.25\linewidth}
+        \begin{tabular}{c|c|c}
+          $x_1$   &      $z$     &   $h_{\Theta}(x)$    \\
+          \hline          
+          0  & 10 & $\thickapprox 1$\\
+          1  & -10 & $\thickapprox 0$\\
+        \end{tabular}\\
+    \end{minipage}
+\end{figure*}
+
+\subsection{Put together: $x_1\ \textbf{NXOR}\ x_2$}
+
+注意到：
+$x_1\ \textbf{XOR}\ x_2\ =\ 
+    (x_1\ \textbf{OR}\ x_2)\ \textbf{AND}\ (\textbf{NOT}\ (x_1\ \textbf{AND}\ x_2))$，
+    
+$x_1\ \textbf{NXOR}\ x_2\ =\ 
+    (x_1\ \textbf{NOR}\ x_2)\ \textbf{OR}\ (x_1\ \textbf{AND}\ x_2)$\\
+    
+\noindent 因此可以组合得到\textbf{NXOR}函数(Figure 4)，以及真值表：\\
+
+\begin{figure}
+  \centering
+  % Requires \usepackage{graphicx}
+  \includegraphics[width=0.7\textwidth]{example_NXOR.png}\\
+  \caption{NXOR function}\label{fig:digit}
+\end{figure}
+
+\begin{center}
+\begin{tabular}{cc|cc|c}
+  $x_1$     &    $x_2$    &    $a_1^{(2)}$    &   $a_2^{(2)}$   &   $h_{\Theta}(x)$    \\
+  \hline
+  0 & 0 & 0 & 1 & $\thickapprox 1$\\
+  0 & 1 & 0 & 0 & $\thickapprox 0$\\
+  1 & 0 & 0 & 0 & $\thickapprox 0$\\
+  1 & 1 & 1 & 0 & $\thickapprox 1$\\
+\end{tabular}\\
+\end{center}
+
+
+
+\section{Multiclass Classification: one-vs-all}
+
+假设我们希望计算一个分类问题，有4个要计算的类别，那么$h_\Theta(x)\in\mathds{R}^{4}$.
+变成了一个向量。并且我们希望
+$\       %equation带编号
+h_\Theta(x)\approx
+\left[                 %左括号
+  \begin{array}{c}   %该矩阵一共1列，每一列都居中放置
+    1\\  %第一行元素
+    0\\  %第二行元素
+    0\\
+    0\\
+  \end{array}
+\right],\ 
+h_\Theta(x)\approx
+\left[                 %左括号
+\begin{array}{c}   %该矩阵一共1列，每一列都居中放置
+    0\\  %第一行元素
+    1\\  %第二行元素
+    0\\
+    0\\
+  \end{array}
+\right]
+$
+，等等。（每个元素的值代表是否属于该类别）\\
+
+相应地，训练集：$(x^{(1)}, y^{(1)}),\ (x^{(2)}, y^{(2)}),...,(x^{(m)}, y^{(m)})$
+中，$y$不再是属于集合$\{1, 2, 3, 4\}$的单个值；\\
+
+$y^{(i)}\in\{
+\left[         
+  \begin{array}{c}  
+    1\\ 
+    0\\  
+    0\\
+    0\\
+  \end{array}
+\right],\ 
+\left[   
+  \begin{array}{c} 
+    0\\ 
+    1\\  
+    0\\
+    0\\
+  \end{array}
+\right],\ 
+\left[         
+  \begin{array}{c} 
+    0\\ 
+    0\\ 
+    1\\
+    0\\
+  \end{array}
+\right],\ 
+\left[        
+  \begin{array}{c} 
+    0\\ 
+    0\\  
+    0\\
+    1\\
+  \end{array}
+\right]
+\}$。\\
+
+\noindent 神经网络的结构类似于：
+\begin{figure*}[h]
+  \centering
+  % Requires \usepackage{graphicx}
+  \includegraphics[width=0.7\textwidth]{Multiclass.png}\\
+  \label{fig:digit}
+\end{figure*}
+
+\end{CJK*}
+
+\end{document}
+
