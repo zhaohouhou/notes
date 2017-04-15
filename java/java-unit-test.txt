@@ -1,0 +1,20 @@
+Java Unit test:
+
+0. create source code folder and class for testing.
+
+1. import: 
+
+import static org.junit.Assert.*;
+
+
+2. above test function:
+
+@org.junit.Test
+
+
+3. assertion:
+
+assertEquals(result, expect)
+
+
+4. run test along building procedure.
