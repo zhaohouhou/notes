@@ -5,7 +5,7 @@ http://www.cnblogs.com/zhujudah/archive/2012/03/22/2411240.html
 
 假如希望在字符串中包含宏参数，ANSI C允许这样作，在类函数宏的替换部分，#符号用作一个预处理运算符，它可以把语言符号转化程字符串。例如，如果x是一个宏参量，那么#x可以把参数名转化成相应的字符串。该过程称为字符串化（stringizing）.
 
-```
+```c
 #incldue <stdio.h>
 #define PSQR(x) printf("the square of" #x "is %d.\n",(x)*(x))
 int main(void)
@@ -16,11 +16,14 @@ int main(void)
     return 0;
 }
 ```
+
 输出结果：
+
 ```
 the square of y is 16.
 the square of 2+4 is 36.
 ```
+
 第一次调用宏时使用“y”代替#x；第二次调用时用“2+4"代#x。
 
 ## 2.`##`
@@ -36,7 +39,7 @@ the square of 2+4 is 36.
 ```x4```
 程序：
 
-```
+```c
 #include <stdio.h>
 #define XNAME(n) x##n
 #define PXN(n) printf("x"#n" = %d\n",x##n)
@@ -56,7 +59,7 @@ x1=12
 __VA_ARGS__ 是一个可变参数的宏，很少人知道这个宏，这个可变参数的宏是新的C99规范中新增的，目前似乎只有gcc支持（VC6.0的编译器不支持）。
 实现思想就是宏定义中参数列表的最后一个参数为省略号（也就是三个点）。这样预定义宏_ _VA_ARGS_ _就可以被用在替换部分中，替换省略号所代表的字符串。比如：
 
-```
+```C
 #define PR(...) printf(__VA_ARGS__)
 int main()
 {

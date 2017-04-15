@@ -1,21 +1,21 @@
-#smart pointer
+# smart pointer
 
 smart pointer (可翻译为智能指针)是C++中帮助实现对象管理的一种方式。
 
-###1. 应用场景
+### 1. 应用场景
 
 C++没有提供自动的内存管理机制（例如java的垃圾回收机制），因而创建的对象需要手动销毁。当程序较为复杂时，会容易出现内存泄漏等问题（我想过早释放和重复释放也是容易出现的）。
 
 考虑情况：当类中存在指针成员时，如何进行管理？一是采用值型的方式管理，每个类对象都保留一份指针指向的对象的拷贝；
 另一种更优雅的方式是使用智能指针，从而实现指针指向的对象的共享。
 
-###2. 从一个简单实现入手
+### 2. 从一个简单实现入手
 
 http://blog.csdn.net/ruizeng88/article/details/6691191
 
 考虑实现一个smart pointer需要实现哪些功能：
 
-1. 能够自动释放所指向的对象。 
+1. 能够自动释放所指向的对象。
 2. 能够像普通纸真一样使用。因此，需要重载*与->运算符。
 3. smart pointer必须是高度类型化的，模板恰好提供了这个功能。
 4. 其他：析构函数、拷贝构造函数和赋值运算符？
@@ -28,7 +28,7 @@ http://blog.csdn.net/ruizeng88/article/details/6691191
 template <typename T>  
 class smart_ptr{  
 public:       
-    smart_ptr();  //default constructor 
+    smart_ptr();  //default constructor
     smart_ptr(T* p);  
     ~smart_ptr();  
     T& operator*();  
@@ -42,7 +42,7 @@ private:
     //add a pointer which points to our object's referenct counter  
     int* ref_cnt;   //是个指针，因为几个smart ptr对象需要共享该域
 };  
-``` 
+```
 
 对其进行使用的测试代码：（从中可以看出对于实现的一些要求）
 
@@ -68,7 +68,7 @@ private:
 
             s -> tell();  
             //C++对象在退出作用域时调用析构函数。
-            //此时smart_ptr<person>的析构函数不能销毁person("Cici")， 
+            //此时smart_ptr<person>的析构函数不能销毁person("Cici")，
             //否则下面的r -> tell()会出错。
 	}
         r -> tell();  
@@ -86,7 +86,7 @@ smart_ptr<T>::smart_ptr():ptr(0),ref_cnt(0){
     ref_cnt = new int(0);  
     (*ref_cnt)++;  
 }  
-``` 
+```
 
 **2) 带参构造函数：**
 
@@ -97,7 +97,7 @@ smart_ptr<T>::smart_ptr(T* p):ptr(p){
     ref_cnt = new int(0);  
     (*ref_cnt)++;  
 }  
-``` 
+```
 
 **3) 析构函数：**
 
@@ -110,7 +110,7 @@ smart_ptr<T>::~smart_ptr(){
         delete ptr;  
     }  
 }  
-``` 
+```
 
 **4) 伪装成指针：**
 
@@ -119,12 +119,12 @@ template <typename T>
 T&  smart_ptr<T>::operator*(){  
     return *ptr;  
 }  
-  
+
 template <typename T>  
 T* smart_ptr<T>::operator->(){  
     return ptr;  
 }  
-``` 
+```
 
 **5) 拷贝构造函数：**
 
@@ -133,7 +133,7 @@ template <typename T>
 smart_ptr<T>::smart_ptr(const smart_ptr<T>& sp):ptr(sp.ptr),ref_cnt(sp.ref_cnt){  
     (*ref_cnt)++;  
 }  
-``` 
+```
 
 **5) =操作符：**
 
@@ -153,13 +153,13 @@ smart_ptr<T>& smart_ptr<T>::operator=(const smart_ptr<T>& sp){
     }  
     return *this;  
 }  
-``` 
+```
 
 其他要考虑的因素：线程安全等。
 
-###3. auto_ptr
+### 3. auto_ptr
 
-http://www.cnblogs.com/qytan36/archive/2010/06/28/1766555.html 
+http://www.cnblogs.com/qytan36/archive/2010/06/28/1766555.html
 
 auto_ptr是C++标准库中(<utility>)为了解决资源泄漏的问题提供的一个智能指针类模板。
 auto_ptr的几个要注意的地方：
