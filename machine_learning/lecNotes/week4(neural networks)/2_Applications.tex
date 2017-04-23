@@ -7,15 +7,19 @@
 \usepackage{dsfont}  % \mathds{}
 \usepackage{amssymb}  %  \mathbb{}
 
+\usepackage{fancyhdr}  
+\pagestyle{fancy} % enable page headers
 % ----------------------------------------------------------------
 \begin{document}
-
+\fancyhead{} % clear all fields  
+\lhead{4.2    Neural Networks: Applications}  
 \title{Neural Networks: Representation - Applications}%
 \author{Di Zhao, 2016-4-9}%
 \date{\small{\texttt{zhaodi01@mail.ustc.edu.cn}}}%
 % ----------------------------------------------------------------
 
 \maketitle
+\thispagestyle{fancy}
 % ----------------------------------------------------------------
 
 \begin{CJK*}{GBK}{song}
@@ -24,7 +28,7 @@
 
 $x_1,x_2 \in \{0,1\}$, 实现函数:
 
-$y=x_1\ \textbf{XOR}\ x_2$, 
+$y=x_1\ \textbf{XOR}\ x_2$,
 
 $y=x_1\ \textbf{NXOR}\ x_2\ =\ NOT(x_1\ \textbf{XOR}\ x_2)$
 
@@ -98,7 +102,7 @@ $h_{\Theta}(x)\ =\ g(-30 + 20x_1 + 20x_2)$。（Figure 1）
     \begin{minipage}{0.25\linewidth}
         \begin{tabular}{c|c|c}
           $x_1$   &      $z$     &   $h_{\Theta}(x)$    \\
-          \hline          
+          \hline
           0  & 10 & $\thickapprox 1$\\
           1  & -10 & $\thickapprox 0$\\
         \end{tabular}\\
@@ -108,12 +112,12 @@ $h_{\Theta}(x)\ =\ g(-30 + 20x_1 + 20x_2)$。（Figure 1）
 \subsection{Put together: $x_1\ \textbf{NXOR}\ x_2$}
 
 注意到：
-$x_1\ \textbf{XOR}\ x_2\ =\ 
+$x_1\ \textbf{XOR}\ x_2\ =\
     (x_1\ \textbf{OR}\ x_2)\ \textbf{AND}\ (\textbf{NOT}\ (x_1\ \textbf{AND}\ x_2))$，
-    
-$x_1\ \textbf{NXOR}\ x_2\ =\ 
+
+$x_1\ \textbf{NXOR}\ x_2\ =\
     (x_1\ \textbf{NOR}\ x_2)\ \textbf{OR}\ (x_1\ \textbf{AND}\ x_2)$\\
-    
+
 \noindent 因此可以组合得到\textbf{NXOR}函数(Figure 4)，以及真值表：\\
 
 \begin{figure}
@@ -149,7 +153,7 @@ h_\Theta(x)\approx
     0\\
     0\\
   \end{array}
-\right],\ 
+\right],\
 h_\Theta(x)\approx
 \left[                 %左括号
 \begin{array}{c}   %该矩阵一共1列，每一列都居中放置
@@ -166,34 +170,34 @@ $
 中，$y$不再是属于集合$\{1, 2, 3, 4\}$的单个值；\\
 
 $y^{(i)}\in\{
-\left[         
-  \begin{array}{c}  
-    1\\ 
-    0\\  
+\left[
+  \begin{array}{c}
+    1\\
     0\\
-    0\\
-  \end{array}
-\right],\ 
-\left[   
-  \begin{array}{c} 
-    0\\ 
-    1\\  
     0\\
     0\\
   \end{array}
-\right],\ 
-\left[         
-  \begin{array}{c} 
-    0\\ 
-    0\\ 
+\right],\
+\left[
+  \begin{array}{c}
+    0\\
+    1\\
+    0\\
+    0\\
+  \end{array}
+\right],\
+\left[
+  \begin{array}{c}
+    0\\
+    0\\
     1\\
     0\\
   \end{array}
-\right],\ 
-\left[        
-  \begin{array}{c} 
-    0\\ 
-    0\\  
+\right],\
+\left[
+  \begin{array}{c}
+    0\\
+    0\\
     0\\
     1\\
   \end{array}

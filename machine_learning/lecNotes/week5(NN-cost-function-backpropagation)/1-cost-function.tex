@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{amsmath,amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{CJK}    % chinese character
+\usepackage{dsfont}  % \mathds{}
+\usepackage{amssymb}  %  \mathbb{}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy} % enable page headers
+% ----------------------------------------------------------------
+\begin{document}
+\fancyhead{} % clear all fields
+\lhead{5.1    Neural Networks: Cost function}
+\title{Neural Networks: Cost function}%
+\author{Di Zhao, 2017-4-23}%
+\date{\small{\texttt{zhaodi01@mail.ustc.edu.cn}}}%
+% ----------------------------------------------------------------
+
+\maketitle
+\thispagestyle{fancy}
+% ----------------------------------------------------------------
+
+\begin{CJK*}{GBK}{song}
+
+\section{Model}
+
+Some variables:
+
+$L$ = 总层数。 total number of layers in the network
+
+$s_l$ = 第l层单元数。 number of units (not counting bias unit) in layer l
+
+$K$ = 输出类别数。number of output units/classes\\
+
+
+
+训练集：
+
+$\{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), ..., (x^{(m)}, y^{(m)})\}$
+
+\section{classification}
+
+\subsection{binary classification}
+
+$y\ =\ 0$ or 1:\\
+
+$h_{\Theta}(x) \in \mathds{R}$ \kern2cm $K=1$
+
+\subsection{Multi-class classification}
+
+$y\ \in\ \mathds{R}^{K}$ :\\
+
+$h_{\Theta}(x) \in \mathds{R}^{K}$ \kern2cm $s_l=K$
+
+\subsection{Cost Function}
+
+\end{CJK*}
+
+\end{document}
+
