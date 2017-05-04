@@ -9,11 +9,13 @@
 
 \usepackage{fancyhdr}
 \pagestyle{fancy} % enable page headers
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=3.5cm,bottom=2.5cm}
 % ----------------------------------------------------------------
 \begin{document}
 \fancyhead{} % clear all fields
-\lhead{5.1    Neural Networks: Cost function}
-\title{Neural Networks: Cost function}%
+\lhead{5.1    Neural Networks: Cost function and Backpropagation}
+\title{Neural Networks: Cost function and Backpropagation}%
 \author{Di Zhao, 2017-4-23}%
 \date{\small{\texttt{zhaodi01@mail.ustc.edu.cn}}}%
 % ----------------------------------------------------------------
@@ -35,10 +37,10 @@ $s_l$ = 第l层单元数。 number of units (not counting bias unit) in layer l
 $K$ = 输出类别数。number of output units/classes\\
 
 
-
 训练集：
 
-$\{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), ..., (x^{(m)}, y^{(m)})\}$
+$\{(x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), ..., (x^{(m)}, y^{(m)})\}$\\
+
 
 \section{classification}
 
@@ -55,6 +57,100 @@ $y\ \in\ \mathds{R}^{K}$ :\\
 $h_{\Theta}(x) \in \mathds{R}^{K}$ \kern2cm $s_l=K$
 
 \subsection{Cost Function}
+
+回顾正规化后的逻辑回归损失函数（cost function）：
+
+$J(\theta)=-\frac{1}{m}\sum\limits_{i=1}^{m}
+[y^{(i)}log(h_{\theta}(x^{(i)}))
++ (1-y^{(i)})log(1-h_{\theta}(x^{(i)}))]
++\frac{\lambda}{2m}\sum\limits_{j=1}^{n}(\theta_{j})^2$\\\\
+
+将$h_{\Theta}(x)_k$记为第k个输出，则神经网络的损失函数为：
+
+$J(\theta)=-\frac{1}{m}\sum\limits_{i=1}^{m}\sum\limits_{k=1}^{K}
+[y_k^{(i)}log((h_{\Theta}(x^{(i)}))_k)
++ (1-y_k^{(i)})log(1-(h_{\Theta}(x^{(i)}))_k)]
++\frac{\lambda}{2m}\sum\limits_{l=1}^{L-1}\sum\limits_{i=1}^{s_l}
+\sum\limits_{j=1}^{s_{l+1}}(\Theta_{j,i}^{(l)})^2$\\\\
+
+改变之处：左侧增加了对输出节点的求和；右侧的正规化部分，将所有层的
+$\theta$都计算在内。\\
+
+\section{Backpropagation}
+
+本节介绍最小化cost function的算法：Backpropagation。回顾cost function
+公式：
+\[
+\begin{split}
+J(\theta)= & -\frac{1}{m}\sum\limits_{i=1}^{m}\sum\limits_{k=1}^{K}
+[y_k^{(i)}log((h_{\Theta}(x^{(i)}))_k)
++ (1-y_k^{(i)})log(1-(h_{\Theta}(x^{(i)}))_k)]\\
+& +\frac{\lambda}{2m}\sum\limits_{l=1}^{L-1}\sum\limits_{i=1}^{s_l}
+\sum\limits_{j=1}^{s_{l+1}}(\Theta_{j,i}^{(l)})^2
+\end{split}
+\]
+为了获得使$J(\Theta)$最小的$\Theta$，需要计算$J(\Theta)$的偏导
+$-\frac{\partial}{\partial\Theta_{ij}^{(l)}}J(\Theta)$。
+
+\subsection{Gradient computation}
+
+对一个四层网络，对训练样本(x, y)，向前传播过程：\\
+
+(第一层的activation value) $a^{(1)}=x$\\
+
+\ \kern4cm$a^{(2)}=g(\Theta^{(1)}a^{(1)})$\  [增加$a_0^{(2)}$]\\
+
+\ \kern4cm$a^{(3)}=g(\Theta^{(2)}a^{(2)})$\  [增加$a_0^{(3)}$]\\
+
+\ \kern4cm$a^{(4)}=g(\Theta^{(3)}a^{(3)})=h_{\Theta}(x)$\\
+
+根据直觉， \underline{向后传播要计算每个$\delta_j^{(l)}$：第$l$层节点$j$
+的误差，即“激励值”$a_j^{(l)}$的误差。}\\
+
+则对输出单元（第四层），$\delta_j^{(4)}=a_j^{(4)}-y_j$。向量形式： 
+$\ \delta^{(4)}=a^{(4)}-y$。则：\\
+
+\ \kern2cm$\delta^{(3)}=(\Theta^{(3)})^T\delta^{(4)}.\ast g^{'}(z^{(3)})$\\
+
+\ \kern2cm$\delta^{(2)}=(\Theta^{(2)})^T\delta^{(3)}.\ast g^{'}(z^{(2)})$\\
+
+其中，$.\ast$表示点乘；$(\Theta^{(3)})^T\delta^{(4)}$与
+$g^{'}(z^{(3)})$均为向量。\\
+
+\begin{center}
+\fbox{%
+  \parbox{12cm}{%
+尝试推导：
+\[
+\begin{split}
+a^{(4)}=&\ g(\Theta^{(3)}a^{(3)})=g(z^{(3)}),\\
+y=&\ g(\Theta^{(3)}(a^{(3)}-\delta^{(3)}))= g(z^{(3)}-\Theta^{(3)}\delta^{(3)}))\\
+=> \kern1cm &\\
+\delta^{(4)}=a^{(4)}-y=&\ g(z^{(3)})-g(z^{(3)}-\Theta^{(3)}\delta^{(3)}))\\
+\approx &\ g^{'}(z^{(3)})\ (\Theta^{(3)}\delta^{(3)})
+\end{split}
+\]
+  }%
+}
+\end{center}
+
+经计算有：\\
+
+\ \kern2cm$g^{'}(z^{(3)})=a^{(3)}.\ast (1-a^{(3)})$\\
+
+\ \kern2cm$g^{'}(z^{(2)})=a^{(2)}.\ast (1-a^{(2)})$\\
+
+向后传播的含义就是根据最后一层得到的误差一层层计算前面
+的误差。（第一层为输入层，不计算误差。）
+
+在不计正规化参数($\lambda=0$)时:
+
+\begin{center}
+$\frac{\partial}{\partial\Theta_{ij}^{(l)}}J(\Theta)=
+a_j^{(l)}\delta_i^{(l+1)}$
+\end{center}
+
+\subsection{Backpropagation algorithm}
 
 \end{CJK*}
 
