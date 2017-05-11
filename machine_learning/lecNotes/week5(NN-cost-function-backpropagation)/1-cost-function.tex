@@ -104,33 +104,37 @@ $-\frac{\partial}{\partial\Theta_{ij}^{(l)}}J(\Theta)$。
 
 \ \kern4cm$a^{(4)}=g(\Theta^{(3)}a^{(3)})=h_{\Theta}(x)$\\
 
-根据直觉， \underline{向后传播要计算每个$\delta_j^{(l)}$：第$l$层节点$j$
-的误差，即“激励值”$a_j^{(l)}$的误差。}\\
+根据直觉， \underline{向后传播要计算每个$\delta_j^{(l)}$：
+第$l$层节点$j$的误差，即“激励值”$a_j^{(l)}$的误差。}\\
 
-则对输出单元（第四层），$\delta_j^{(4)}=a_j^{(4)}-y_j$。向量形式： 
+则对输出单元（第四层），$\delta_j^{(4)}=a_j^{(4)}-y_j$。向量形式：
 $\ \delta^{(4)}=a^{(4)}-y$。则：\\
 
-\ \kern2cm$\delta^{(3)}=(\Theta^{(3)})^T\delta^{(4)}.\ast g^{'}(z^{(3)})$\\
+\ \kern2cm$\delta^{(3)}
+=(\Theta^{(3)})^T\delta^{(4)}.\ast g^{'}(z^{(3)})$\\
 
-\ \kern2cm$\delta^{(2)}=(\Theta^{(2)})^T\delta^{(3)}.\ast g^{'}(z^{(2)})$\\
+\ \kern2cm$\delta^{(2)}
+=(\Theta^{(2)})^T\delta^{(3)}.\ast g^{'}(z^{(2)})$\\
 
 其中，$.\ast$表示点乘；$(\Theta^{(3)})^T\delta^{(4)}$与
 $g^{'}(z^{(3)})$均为向量。\\
 
 \begin{center}
-\fbox{%
-  \parbox{12cm}{%
+\dashbox{5}(350,120)[s]{
+  \parbox{12cm}{
 尝试推导：
 \[
 \begin{split}
 a^{(4)}=&\ g(\Theta^{(3)}a^{(3)})=g(z^{(3)}),\\
-y=&\ g(\Theta^{(3)}(a^{(3)}-\delta^{(3)}))= g(z^{(3)}-\Theta^{(3)}\delta^{(3)}))\\
+y=&\ g(\Theta^{(3)}(a^{(3)}-\delta^{(3)}))=
+ g(z^{(3)}-\Theta^{(3)}\delta^{(3)}))\\
 => \kern1cm &\\
-\delta^{(4)}=a^{(4)}-y=&\ g(z^{(3)})-g(z^{(3)}-\Theta^{(3)}\delta^{(3)}))\\
+\delta^{(4)}=a^{(4)}-y=&
+\ g(z^{(3)})-g(z^{(3)}-\Theta^{(3)}\delta^{(3)}))\\
 \approx &\ g^{'}(z^{(3)})\ (\Theta^{(3)}\delta^{(3)})
 \end{split}
 \]
-  }%
+  }
 }
 \end{center}
 
@@ -150,7 +154,91 @@ $\frac{\partial}{\partial\Theta_{ij}^{(l)}}J(\Theta)=
 a_j^{(l)}\delta_i^{(l+1)}$
 \end{center}
 
+\kern1cm
+
 \subsection{Backpropagation algorithm}
+
+Training set: $\{(x^{(1)}, y^{(1)}), ..., (x^{(m)}, y^{(m)})\}$\\
+
+对所有l,i,j，设$\Delta_{ij}^{(l)}=0$。
+用以计算$\frac{\partial}{\partial\Theta_{ij}^{(l)}}J(\Theta)$。
+($\Delta$为$\delta$的大写)
+
+计算过程：\\
+
+
+\fbox{%
+\parbox{16cm}{%
+For $i=1$ to $m$ :(对每个训练样本进行计算)
+    \begin{quote}
+    设$a^{(1)}=x^{(i)}$
+
+    通过向前传播计算$a^{(l)}$，$l=2, 3, ..., L$.
+
+    使用$y^{(i)}$，计算$\delta^{(L)}=a^{(L)}-y^{(i)}$.
+    
+    向后传播计算$\delta^{(L-1)}, \delta^{(L-2)}, ..., \delta^{(2)}$.
+    (由于不计输入的误差， 因此没有$\delta^{(1)}$.)
+    
+    累加得到的偏导项：
+    $\Delta_{ij}^{(l)}:=\Delta_{ij}^{(l)}+a_j^{(l)}\delta_i^{(l+1)}$
+    
+    (向量形式：
+    $\Delta^{(l)}:=\Delta^{(l)}+\delta^{(l+1)}(a^{(l)})^T$.)
+    \end{quote}
+    
+循环结束后，计算：\\
+
+$D_{ij}^{(l)}:=
+    \frac{1}{m}\Delta_{ij}{(l)}+\lambda \Theta_{ij}{(l)}$
+    \kern1cm if $j\neq0$\\
+
+$D_{ij}^{(l)}:=
+    \frac{1}{m}\Delta_{ij}{(l)}$ \kern1cm if $j=0$
+
+}
+}
+
+\kern5mm
+
+可以证明， $\frac{\partial}{\partial\Theta_{ij}^{(l)}}J(\Theta)
+=D_{ij}^{(l)}$. 因此，可使用这些值进行梯度下降。\\\\
+
+\section{Backpropagation Intuition}
+
+对于神经网络损失函数
+\[
+\begin{split}
+J(\theta)= & -\frac{1}{m}\sum\limits_{i=1}^{m}\sum\limits_{k=1}^{K}
+[y_k^{(i)}log((h_{\Theta}(x^{(i)}))_k)
++ (1-y_k^{(i)})log(1-(h_{\Theta}(x^{(i)}))_k)]\\
+& +\frac{\lambda}{2m}\sum\limits_{l=1}^{L-1}\sum\limits_{i=1}^{s_l}
+\sum\limits_{j=1}^{s_{l+1}}(\Theta_{j,i}^{(l)})^2
+\end{split}
+\]
+忽略正规化项($\lambda = 0$)，并且只考虑单类分类问题，则：\\
+
+$J(\theta)=  -\frac{1}{m}\sum\limits_{i=1}^{m}
+[y^{(i)}log((h_{\Theta}(x^{(i)})))
++ (1-y^{(i)})log(1-(h_{\Theta}(x^{(i)})))]$\\\\
+
+于是，每个样本的贡献为：\\
+
+$cost(i)= y^{(i)}log((h_{\Theta}(x^{(i)})))
++ (1-y^{(i)})log(1-(h_{\Theta}(x^{(i)})))$\\\\
+
+直觉上，$\delta_j^{(l)}$为$a_j^{(l)}$产生的误差。实际上，
+$\delta$值为损失函数的偏导：\\
+
+\ \kern1cm
+$\delta_j^{(l)}=\frac{\partial}{\partial z_j^{(l)}}cost(i)$
+\kern1cm [对样本i]\\
+
+对于一个第三层有两个节点(不含bias unit)的神经网络，反向传播中：\\
+
+\ \kern1cm
+$\delta_2^{(2)}=\Theta_{12}^{(2)}\ast\delta_1^{(3)}
++ \Theta_{22}^{(2)}\ast\delta_2^{(3)}$
 
 \end{CJK*}
 
