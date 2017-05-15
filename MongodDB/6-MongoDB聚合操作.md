@@ -17,3 +17,11 @@ db.COLLECTION_NAME.aggregate(
    ]
 )
 ```
+
+计算平均值：
+
+```
+db.COLLECTION_NAME.aggregate(
+  [{$group : {_id : null, avg_value : {$avg : "$FIELD_NAME"}}}]
+)
+```

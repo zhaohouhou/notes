@@ -120,6 +120,12 @@ pom文件添加引用。例如：
 </plugin>
 ```
 
+### 5. maven跳过单元测试
+
+命令行使用时：
+
+`mvn install -Dmaven.test.skip=true`
+
 
 ### ref:
 
