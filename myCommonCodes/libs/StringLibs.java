@@ -40,4 +40,24 @@ public class StringLibs
         }
         return true;
     }
+
+    /**
+     * Generate a random(temporarily unique) string.
+     * Characters: {0-9, a-Z}
+     * */
+    public static String randStr(){
+        String characters = "0123456789" +
+                          "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+                          "abcdefghijklmnopqrstuvwxyz";
+        int length = 15;
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i <length ; i++)
+        {
+          //System.currentTimeMillis() is not enough 'random'!
+            Random rdm = new Random(System.nanoTime());
+            int index = Math.abs(rdm.nextInt())%(characters.length());
+            str.append(characters.charAt(index));
+        }
+        return str.toString();
+    }
 }

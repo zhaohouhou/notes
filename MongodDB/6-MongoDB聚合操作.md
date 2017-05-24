@@ -20,8 +20,10 @@ db.COLLECTION_NAME.aggregate(
 
 计算平均值：
 
-```
+```shell
 db.COLLECTION_NAME.aggregate(
   [{$group : {_id : null, avg_value : {$avg : "$FIELD_NAME"}}}]
 )
 ```
+
+注意，聚合的FIELD_NAME前加'$'。
