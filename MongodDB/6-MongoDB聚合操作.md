@@ -6,7 +6,12 @@ MongoDB中聚合(aggregate)主要用于处理数据(诸如统计平均值,求和
 
 ### 基本语法
 
+
     >db.COLLECTION_NAME.aggregate(AGGREGATE_OPERATION)
+
+语法：
+
+    aggregate([{$group:{_id:"$fieldName",alias:{分组函数:"$fieldName"}}}]) 
 
 例如，如下命令统计集合中文档个数：
 
