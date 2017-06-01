@@ -1,0 +1,135 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{amsmath,amsthm,styfiles/code}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{CJK}    % chinese character
+\usepackage{dsfont}  % \mathds{}
+\usepackage{amssymb}  %  \mathbb{}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy} % enable page headers
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=3.5cm,bottom=2.5cm}
+% ----------------------------------------------------------------
+\begin{document}
+\fancyhead{} % clear all fields
+\lhead{5.2  Neural Networks: Backpropagation in Practice}
+\title{Neural Networks: Backpropagation in Practice}%
+\author{Di Zhao, 2017-5-17}%
+\date{\small{\texttt{zhaodi01@mail.ustc.edu.cn}}}%
+% ----------------------------------------------------------------
+
+\maketitle
+\thispagestyle{fancy}
+% ----------------------------------------------------------------
+
+\begin{CJK*}{GBK}{song}
+
+\section{Unrolling Parameters}
+
+在前面计算逻辑回归时，我们使用了优化函数\texttt{fminunc}
+（或其他高级优化函数）。例如：
+
+\begin{code}
+function [jVal, gradient] = costFunction(theta)
+...
+optTheta = fminunc(@costFunction, initialTheta, options)
+\end{code}
+
+其中，\texttt{gradient}和\texttt{theta}均为向量。
+而在神经网络的情况下，
+\[
+\begin{split}
+\Theta^{(1)},\ \Theta^{(2)},\ \Theta^{(3)}
+& - \textsf{matrices}\ (\texttt{Theta1, Theta2, Theta3})\\
+D^{(1)},\ D^{(2)},\ D^{(3)}
+& - \textsf{matrices}\ (\texttt{D1, D2, D3})
+\end{split}
+\]
+均为矩阵。因此，为了传入参数\texttt{Theta}、并且计算得到并取出
+相应梯度值，需要对矩阵进行展开（unroll）。
+
+\subsection{Example}
+
+\begin{figure}[!htb]
+  \begin{minipage}[!htb]{0.65\textwidth}
+    $s_1=10, s_2=10, s_3=1$\\
+    
+    $\Theta^{(1)}\in \mathbb{R}^{10\times11},\ 
+    \Theta^{(2)}\in \mathbb{R}^{10\times11},\ 
+    \Theta^{(1)}\in \mathbb{R}^{1\times11}$\\
+    
+    $D^{(1)}\in \mathbb{R}^{10\times11},\
+    D^{(2)}\in \mathbb{R}^{10\times11},\
+    D^{(1)}\in \mathbb{R}^{1\times11}$\\
+    
+    在Octave中，展开后的向量为：
+    \begin{code}
+    thetaVec = [Theta1(:); Theta2(:); Theta3(:)];
+    DVec = [D1(:); D2(:); D3(:); ]
+    \end{code}
+  \end{minipage}%
+  \begin{minipage}[t]{0.25\textwidth}
+    \centering
+    \includegraphics{example.png}
+    \caption{NN}
+    \label{fig:digit}
+  \end{minipage}
+\end{figure}
+
+其中\texttt{Theta1(:)}表示将$\Theta^{(1)}$中的所有元素展开得到的向量，
+依次类推。\texttt{thetaVec}是所有Thata展开后拼接成的很长的向量。
+D矩阵向量类似。
+
+取出参数矩阵：
+\begin{code}
+Theta1 = reshape(thetaVec(1:110), 10, 11);
+Theta2 = reshape(thetaVec(111:220), 10, 11);
+Theta3 = reshape(thetaVec(221:231), 1, 11);
+\end{code}
+即，将向量中相应元素取出重新变形为矩阵。
+
+\subsection{Learning Algorithm}
+
+\ 
+
+假设初始参数为$\Theta^{(1)},\ \Theta^{(2)},\ \Theta^{(3)}$.
+
+展开得到初始Theta长向量\texttt{initialTheta}，
+传给\texttt{fminunc}函数：
+\begin{code}
+fminunc(costFunction, initialThat, options)
+\end{code}
+因此需要实现cost function：
+\begin{code}
+function[jval, gradientVec] = costFunction(thetaVec)
+\end{code}
+
+\ 
+
+实现算法为：
+
+\begin{quote}
+从\texttt{thetaVec}得到$\Theta^{(1)},\ \Theta^{(2)},\ \Theta^{(3)}$.
+
+使用向前/向后传播计算$D^{(1)},\ D^{(2)},\ D^{(3)}$和$J(\Theta)$.
+
+展开$D^{(1)},\ D^{(2)},\ D^{(3)}$得到\texttt{gradientVec}。
+\end{quote}
+
+\ 
+
+\section{Gradient checking}
+
+由于BP算法的复杂性，使得实现上容易出错:
+尽管看上去$J(\Theta)$在减小，但算法并不正确，
+学习结果有很大误差。
+\textbf{梯度检验（Gradient checking）}能够减少这种错误的出现。
+
+复杂的算法应当尽量使用梯度检验使算法更可信（代码验证）。
+
+\end{CJK*}
+
+\end{document}
+
