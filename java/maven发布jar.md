@@ -126,6 +126,77 @@ pom文件添加引用。例如：
 
 `mvn install -Dmaven.test.skip=true`
 
+### 6. 使用不同配置（properties）
+
+项目开发时常希望根据不同环境需求（开发、测试、生产等）打包不同的参数。手动更改麻烦且容易出错，利用maven的filter和profile功能，可以使用不同的properties文件，打包时动态修改properties参数值。
+
+假设resources目录下有三个property文件：`dev.properties`，`test.properties`，`product.properties` 分别用于开发、测试和生产。
+
+1. pom文件添加如下配置：
+
+	```xml
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault><!-- 默认激活 -->
+			</activation>
+			<build>
+				<filters>
+					<filter>dev.properties</filter>
+				</filters>
+			</build>
+		</profile>
+		<profile>
+			<id>test</id>
+			<build>
+				<filters>
+					<filter>test.properties</filter>
+				</filters>
+			</build>
+		</profile>
+		<profile>
+			<id>product</id>
+			<build>
+				<filters>
+					<filter>product.properties</filter>
+				</filters>
+			</build>
+		</profile>
+	</profiles>
+	```
+
+2. pom文件中包含资源文件并设置filter
+
+	```xml
+	<build>
+		<resources>
+			<!-- 先指定 src/main/resources下所有文件及文件夹为资源文件 -->
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+			<!-- 设置对config.properties进行过虑，即文件中的${key}会被替换掉为真正的值 -->
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>config.properties</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+	```
+
+3. 编译
+
+	maven filter可利用指定的xxx.properties中对应的key=value对资源文件中的${key}进行替换，最终把你的资源文件中的username=${key}替换成username=value。filter是在maven的compile阶段执行过虑替换的，所以只要触发了编译动作即可。
+
+	例如按照测试环境打包：
+
+	`maven clean install -Ptest`.
 
 ### ref:
 
