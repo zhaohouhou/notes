@@ -31,4 +31,22 @@ public class ResourcesUtil
       }
       return value;
    }
+
+   public String getClassPath()
+   //get the path of .class file
+   {
+      return ResourcesUtil.class.getClass().getResource("/");
+   }
+
+   public String getWebAppPath()
+   //get the path of webapp folder (for tomcat service)
+   {
+      return System.getProperty("catalina.home");
+   }
+
+   public String getExecPath()
+   //current execution path
+   {
+     return System.getProperty("user.dir");
+   }
 }
