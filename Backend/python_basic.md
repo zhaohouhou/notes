@@ -49,6 +49,21 @@ HelloHelloHello
 Hello123
 ```
 
+
+#### `%`:格式化字符串：
+与C语言用法相似：
+
+```python
+s = "%s is %d age old" % ('Alice', 9)
+print s
+```
+
+运行结果：
+
+```
+Alice is 9 age old
+```
+
 ## 3. 基本运算
 
 ### 算数运算符
