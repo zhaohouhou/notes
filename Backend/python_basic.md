@@ -64,6 +64,17 @@ print s
 Alice is 9 age old
 ```
 
+### 输入输出
+
+使用`raw_input`进行简单获取输入：
+
+```python
+>>> in_str = raw_input('typein:')
+typein:12345  # user input
+>>> print in_str
+12345
+```
+
 ## 3. 基本运算
 
 ### 算数运算符

@@ -36,5 +36,12 @@ while循环和for循环通过条件控制循环执行。for循环可以遍历序
   - `break`: 退出整个循环
   - `pass`: 不做任何事情，一般用做占位语句。
 
+## 3. 函数定义
+
+```python
+def my_function( arg ):
+  print 'hello', arg
+  return
+```
 
 </br></br>
