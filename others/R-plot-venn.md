@@ -31,12 +31,14 @@ library(VennDiagram)
 # define the vectors
 x <- c(1,3,5,7,9,11,17,19,21,23,25,29,31,33,37,39,41,47,49,51,57,59)
 y <- c(1,3,5,7,13,17,19,21,23,25,27,29,31,33,45,47,51)
-z <- c(1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,55,57,59,61)
+z <- c(1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39)
 
 # draw Venn-plot as an output file.
 venn.diagram(list(X=x,Y=y,Z=z),fill=c("red","blue","yellow"),"out.tiff")
 
 ```
+
+<img src="VennDiagram.png" height="300">
 
 venn.diagram函数详细说明：
 http://finzi.psych.upenn.edu/R/library/VennDiagram/html/venn.diagram.html
@@ -106,6 +108,8 @@ plot(data,doWeight=T)    # doWeight参数决定是否按比例绘图
 data <- Venn(SetNames= c("A","B","C"), Weight=c(0,1,2,3,4,5,6,7))
 ```
 
+<img src="Vennerable.png" height="300">
+
 ref:
 
 http://finzi.psych.upenn.edu/R/library/utils/html/read.table.html
@@ -138,6 +142,8 @@ v = venn3(subsets=subsets, set_labels=('Apple', 'Orange', 'Banana'))
 
 plt.show()
 ```
+
+<img src="matplotlib_venn.png" height="350">
 
 Python绘制的Venn图稍微好看一些。
 
