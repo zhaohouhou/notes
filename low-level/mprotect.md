@@ -1,12 +1,14 @@
-#修改内存权限（Linux）
+# 修改内存权限（Linux）
 
 在Linux中，mprotect()函数可以用来修改一段指定内存区域的保护属性。
 
 函数原型：
 
-		#include <unistd.h>  
-    	#include <sys/mman.h>  
-    	int mprotect(const void *start, size_t len, int prot);  
+```c
+#include <unistd.h>  
+#include <sys/mman.h>  
+int mprotect(const void *start, size_t len, int prot);
+```
 
 prot可以取以下几个值，并且可以用“|”将几个属性合起来使用：
 
@@ -17,11 +19,12 @@ prot可以取以下几个值，并且可以用“|”将几个属性合起来使
 3）PROT_EXEC：表示内存段中的内容可执行；
 
 4）PROT_NONE：表示内存段中的内容根本没法访问。
-
-	#define PROT_READ	0x1     /* Page can be read.  */
-	#define PROT_WRITE	0x2     /* Page can be written.  */
-	#define PROT_EXEC	0x4     /* Page can be executed.  */
-	#define PROT_NONE	0x0     /* Page can not be accessed.  */
+```c
+#define PROT_READ	0x1     /* Page can be read.  */
+#define PROT_WRITE	0x2     /* Page can be written.  */
+#define PROT_EXEC	0x4     /* Page can be executed.  */
+#define PROT_NONE	0x0     /* Page can not be accessed.  */
+```
 
 <font color = 'red'>注意：指定的内存区间必须包含整个内存页（4K）。区间开始的地址start必须是一个内存页的起始地址，并且区间长度len必须是页大小的整数倍。</font>
 
@@ -43,11 +46,11 @@ start 不是一个有效的指针，指向的不是某个内存页的开头。
 
 4）ENOMEM
 
-进程的地址空间在区间 [start, start+len] 范围内是无效，或者有一个或多个内存页没有映射。 
+进程的地址空间在区间 [start, start+len] 范围内是无效，或者有一个或多个内存页没有映射。
 
 如果调用进程内存访问行为侵犯了这些设置的保护属性，内核会为该进程产生 SIGSEGV （Segmentation fault，段错误）信号，并且终止该进程。
 
-##附1 示例代码
+## 附1 示例代码
 
 ```C
 #include <stdio.h>
@@ -67,8 +70,8 @@ int foo()
 int main(){
 	int pagesize = 1024 * 4;
 	printf("pagesize %x\n", pagesize);
-	int r = mprotect(foo - (int)foo%pagesize, 
-				pagesize * 1, 
+	int r = mprotect(foo - (int)foo%pagesize,
+				pagesize * 1,
 				PROT_READ | PROT_WRITE | PROT_EXEC);
 	if(r < 0){
 		printf("mprotect failed\n");
@@ -80,13 +83,13 @@ int main(){
 			printf("ENOMEM: invalid scope\n");
 		return 0;
 	}
-		
+
 	printf("hello %d\n", foo());
 	return 0;
 }
 ```
 
-##附2 Linux Error Code
+## 附2 Linux Error Code
 
 ```
 C Name    Value    Description
