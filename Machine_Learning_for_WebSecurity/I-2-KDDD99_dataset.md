@@ -52,17 +52,16 @@ wrong_fragment: continuous.
 
 ## 2. 数据预处理
 
-对KDD99数据进行建模训练之前，首先要进行一些数据预处理。下面是一些个人能想到的需要进行的处理：
+对KDD99数据进行建模训练之前，首先要进行一些数据预处理。下面是一些可能需要进行的处理：
 
 ### 2. 1. 枚举类型转化为值型
 
 枚举类型无法直接进行计算，需要转换为值型。
-
-考虑要减小对于分类结果准确性的影响，可采用“分箱”式的特征转换：使用一串0/1值表示枚举值是否为枚举关键字中的某一项。
+考虑要减小对于分类结果准确性的影响，可采用一串0/1值表示枚举值是否为枚举关键字中的某一项。
 
 因此，可以首先从数据中统计一遍枚举关键字，形成每一个特征项的字典；在第二遍处理数据，将symbolic数据转换为0/1串。
-
 （这种方式会增加特征的长度，因此关键字数量不能过多，否则需要考虑其他方式）
+
 
 ### 2. 2. 连续型特征
 
@@ -73,6 +72,25 @@ wrong_fragment: continuous.
 作为简单开始，这里我们使
 `X := (X - X_min) / (X_max - X_min)`, 从而将特征取值范围变化到`[0, 1]`。因此，首先需要取得连续数据的最大值和最小值。
 
+`sklearn.preprocessing`包含了一些有用的函数：
+- `preprocessing.normalize()`: normalization
+- `preprocessing.scale()`: scale
+- `preprocessing.MinMaxScaler`: `fit_transform()`函数进行归一化
+
+### 2. 3. 文本特征
+
+文本特征提取可以采用词集模型或词袋模型（区别在于词袋模型统计了单词的出现次数）。
+
+`sklearn.feature_extraction.text` 包含了处理工具类 `CountVectorizer`.
+
+</br>
+
+---
+
+KDD99数据经过上面预处理，可得到含有118个特征的转换后数据。
+在10%部分数据（约50万条数据）上进行实验，使用决策树模型可以训练得到准确率超过99.9%的准确率（区分攻击类型与否均可）。
+
+另一个Web访问数据集HTTP DATASET CSIC 2010 (http://www.isi.csic.es/dataset/). Contains 36,000 normal requests and more than 25,000 anomalous requests.
 
 ---
 
