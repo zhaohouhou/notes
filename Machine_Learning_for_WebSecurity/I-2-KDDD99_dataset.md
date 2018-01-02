@@ -88,7 +88,7 @@ wrong_fragment: continuous.
 ---
 
 KDD99数据经过上面预处理，可得到含有118个特征的转换后数据。
-在10%部分数据（约50万条数据）上进行实验，使用决策树模型可以训练得到准确率超过99.9%的准确率（区分攻击类型与否均可）。
+在10%部分数据（约50万条数据）上进行实验，使用决策树模型可以训练得到准确率超过99.9%的准确率（区分攻击类型与否均可）。在测试集文件的准确率约为90%（可能由于测试集包含了未知攻击类型）
 
 另一个Web访问数据集HTTP DATASET CSIC 2010 (http://www.isi.csic.es/dataset/). Contains 36,000 normal requests and more than 25,000 anomalous requests.
 
