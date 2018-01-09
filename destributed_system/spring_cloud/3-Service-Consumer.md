@@ -70,9 +70,12 @@ public class ServiceRibbonApplication {
 写一个controller，通过`restTemplate`来消费`service-hi`服务的`"/hi"`接口。这里我们用程序名替代了具体的url地址，ribbon会根据服务名来选择具体的服务实例，根据服务实例在请求的时候会用具体的url替换掉服务名，代码如下：
 
 ```java
+//@RestController：Spring4, 声明返回json字符串数据，可直接编写restfull接口.
 @RestController
 public class HelloControler {
 
+    //Spring2.5 @Autowired注释，可对类成员变量、方法及构造函数进行标注，完成自动装配。
+    //通过@Autowired消除 set ，get方法。
     @Autowired
     RestTemplate restTemplate;
 
@@ -83,7 +86,7 @@ public class HelloControler {
 }
 ```
 
-此时，在浏览器上多次访问http://localhost:8201/hi?name=xxx，浏览器交替显示：
+此时，在浏览器上多次访问 http://localhost:8201/hi?name=xxx ，交替显示：
 
 ```
 hi xxx,i am from port:8101
@@ -94,7 +97,7 @@ hi xxx,i am from port:8102
 至此，我们已经通过Ribbon在客户端侧实现了均衡负载。服务器的架构如下图所示：
 
 <div align=center>
-![](ribbon_restTemplate.png)
+<img src="ribbon_restTemplate.png">
 </div>
 
 ## 2. Feign
@@ -130,6 +133,48 @@ Feign是一个声明式的web服务客户端，它使得客户端编写变得更
 
 配置文件中端口配置为 **8301**，指定程序名为`service-feign`，其他与前面类似。
 
+在程序的启动类`ServiceFeignApplication` ，加上`@EnableFeignClients`注解，开启Feign功能：
+
+```java
+@SpringBootApplication
+@EnableDiscoveryClient
+@EnableFeignClients
+public class ServiceFeignApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ServiceFeignApplication.class, args);
+    }
+}
+```
+
+定义一个feign接口，通过`@FeignClient`+"服务名"，指定调用哪个服务:
+
+```java
+@FeignClient(value = "service-hi")
+public interface SchedualServiceHi {
+    @RequestMapping(value = "/hi",method = RequestMethod.GET)
+    String sayHi(@RequestParam(value = "name") String name);
+}
+```
+
+在controller层通过上面定义的Feign客户端`SchedualServiceHi` 来消费服务：
+
+```java
+@RestController
+public class HiController {
+
+    @Autowired
+    SchedualServiceHi schedualServiceHi;
+    @RequestMapping(value = "/hi",method = RequestMethod.GET)
+    public String sayHi(@RequestParam String name){
+        return schedualServiceHi.sayHi(name);
+    }
+}
+```
+
+与前面类似地，启动服务后在浏览器上多次访问 http://localhost:8301/hi?name=xxx ，会交替显示两个client返回的结果。
+
+
 ## ref:
 
 ribbon:
@@ -145,5 +190,7 @@ feign:
 http://blog.csdn.net/forezp/article/details/69808079
 
 http://cloud.spring.io/spring-cloud-static/Finchley.M5/single/spring-cloud.html#spring-cloud-feign
+
+http://www.mamicode.com/info-detail-1723937.html (Solr配置冲突解决)
 
 <br/><br/>
