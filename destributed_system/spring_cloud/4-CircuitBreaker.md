@@ -181,12 +181,11 @@ public class ServiceFeignApplication  {
 
 启动工程后访问 http://localhost:8301/hystrix.stream 地址，会显示页面：
 
-![](hystrix_dashboard.png)
+<img src="hystrix_dashboard.png">
 
 输入 http://localhost:8301/hystrix.stream 并任意设置title后点击 Monitor Stream，可以看到实时监控面板。指标含义图例如下：
 
-![](hystrix_dashboard_2.png)
-
+<img src="hystrix_dashboard_2.png">
 
 ---
 
