@@ -13,11 +13,9 @@
 
 断路器使得应用程序继续执行而不用被阻塞。断路器也可以使应用程序能够诊断错误是否已经修正，如果被修正则再次尝试调用操作。
 
-## Hystrix
-
 Netflix开源了Hystrix库，实现了断路器模式。Spring Cloud整合了这一组件。
 
-### 1. 在ribbon使用断路器
+## 1. 在ribbon使用断路器（Hystrix）
 
 在前面章节的`service-ribbon`项目pom中添加`spring-cloud-starter-hystrix`依赖:
 
@@ -83,7 +81,7 @@ hi xxx, sorry, error!
 
 说明当 `service-hi` 工程不可用时，`service-ribbon` 调用 `service-hi` 的API接口会执行快速失败，直接返回字符串而不是等待响应超时，很好的控制了容器的线程阻塞。
 
-### 2. 在Feign使用断路器
+## 2. 在Feign使用断路器
 
 Feign中集成了Hystrix，然而在Spring Cloud Dalston版本以后是默认关闭的。因此需要在配置文件中开启：
 
@@ -96,6 +94,7 @@ feign.hystrix.enabled=true
 新建`SchedualServiceHiHystric`，实现`SchedualServiceHi`接口，并注入到Ioc容器：
 
 ```java
+//@Component,@Service,@Controller,@Repository：纳入spring容器中管理。
 @Component
 public class SchedualServiceHiHystric implements SchedualServiceHi {
     @Override
@@ -129,8 +128,64 @@ sorry xxx
 
 说明断路器起到作用。
 
-### 3. Hystrix Dashboard (Hystrix 仪表盘)
+## 3. Hystrix Dashboard (Hystrix 仪表盘)
 
+#### Hystrix监控
+
+Hystrix还提供了近实时的监控。Hystrix会实时、累加地记录所有关于HystrixCommand的执行信息，包括每秒执行多少请求多少成功，多少失败等。
+
+修改`service-feign`工程，在启动类上添加注解`@EnableCircuitBreaker`；项目依赖添加：
+
+```xml
+<dependency>
+	<groupId>com.netflix.hystrix</groupId>
+	<artifactId>hystrix-metrics-event-stream</artifactId>
+</dependency>
+```
+
+启动`service-feign`工程，此时访问 http://localhost:8301/hystrix.stream 地址会持续输出监控数据：
+
+    data: {"type":"HystrixCommand","name":"SchedualServiceHi#sayHi...
+
+#### Hystrix Dashboard
+
+Hystrix Dashboard可以可视化查看实时监控数据。Spring Cloud中Hystrix Dashboard的基本使用： (基于ribbon和feign的修改相同)
+
+pom中添加依赖：
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
+</dependency>
+```
+
+启动类中加入`@EnableHystrixDashboard`注解，开启Hystrix Dashboard:
+
+```java
+@SpringBootApplication
+@EnableDiscoveryClient
+@EnableFeignClients
+@EnableCircuitBreaker
+@EnableHystrixDashboard
+public class ServiceFeignApplication  {
+	public static void main(String[] args) {
+		SpringApplication.run(ServiceFeignApplication .class, args);
+	}
+}
+```
+
+启动工程后访问 http://localhost:8301/hystrix.stream 地址，会显示页面：
+
+![](hystrix_dashboard.png)
+
+输入 http://localhost:8301/hystrix.stream 并任意设置title后点击 Monitor Stream，可以看到实时监控面板。指标含义图例如下：
+
+![](hystrix_dashboard_2.png)
 
 
 ---
