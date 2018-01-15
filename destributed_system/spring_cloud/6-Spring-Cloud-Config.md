@@ -83,11 +83,11 @@ Spring Cloud Config 组件中，有 config server 和 config client 两种角色
   ```
 
   > Spring Cloud项目可以使用yml或properties文件进行配置，原理相同。
-
+  >
   > **application.yml** or **application.properties** contains standard application configuration.
-
+  >
   > **bootstrap.yml** or **bootstrap.properties** is only used/needed if you're using Spring Cloud and your application's configuration is stored on a remote configuration server (e.g. Spring Cloud Config Server).
-
+  >
   > **bootstrap.yml** is loaded before **application.yml**.
 
 3. 程序的入口类，API接口“／hi”，返回从配置中心读取的foo变量的值：
@@ -111,7 +111,7 @@ Spring Cloud Config 组件中，有 config server 和 config client 两种角色
 
   若git仓库中config-client-dev.properties文件保存了foo变量的配置，则程序可以通过config server读取配置信息（访问 http://localhost:8601/hi ）。
 
-  ** git仓库 => Config Server => Config Client **
+  **git仓库 => Config Server => Config Client**
 
 ## 3. 高可用的分布式配置中心
 
