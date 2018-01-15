@@ -187,6 +187,10 @@ public class ServiceFeignApplication  {
 
 <img src="hystrix_dashboard_2.png">
 
+## 4. Turbine
+
+在复杂的分布式系统中，相同服务的节点经常需要部署成百上千个，很多时候，运维人员希望能够把相同服务的节点状态以一个整体集群的形式展现出来，以更好的把握整个系统的状态。 Netflix提供了一个开源项目（Turbine）来提供把多个hystrix.stream的内容聚合为一个数据源供Dashboard展示。  
+
 ---
 
 ## ref

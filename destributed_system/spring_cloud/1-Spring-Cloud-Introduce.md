@@ -58,10 +58,10 @@ Spring Boot 致力于建立生产就绪（production-ready）的Spring程序，�
 相关问题：
 
 - 服务间通信： 微服务都是独立的Java进程跑在独立的虚拟机上，所以服务间的通信是IPC（inter process communication）。通用的方式：
-  - 同步调用：
-    - REST（JAX-RS，Spring Boot）
-    - RPC（Thrift, Dubbo）
-  - 异步消息调用： Kafka, Notify, MetaQ
+  - 同步调用：简单、一致性强，但容易出现调用问题，特别是调用层次多时，性能体验较差。
+    - REST（JAX-RS，Spring Boot）：一般基于HTTP，更容易实现、服务端实现技术更灵活，各个语言都能支持，能够跨客户端，因此使用广泛。
+    - RPC（Thrift, Dubbo）：传输协议更高效，安全更可控，有统一的开发规范和服务框架时，开发效率更有优势。
+  - 异步消息调用（Kafka, Notify, MetaQ）：异步消息方式在分布式系统中有广泛的应用。能够降低调用服务之间的耦合，使调用方无需停止等待，但解决数据一致性的问题，存在技术上的挑战。
 
 
 - 实现： 一般每个服务有多个拷贝，用来做负载均衡。一个服务随时可能下线，也可能应对临时访问压力增加新的服务节点。
@@ -80,6 +80,8 @@ http://blog.csdn.net/forezp/article/details/69696915 (sprint cloud)
 http://projects.spring.io/spring-cloud/#quick-start
 
 https://projects.spring.io/spring-boot/
+
+http://www.cnblogs.com/wintersun/p/6219259.html 微服务架构设计
 
 http://www.cnblogs.com/imyalost/p/6792724.html (microservice)
 
