@@ -10,7 +10,7 @@
 
 ## 1. ribbon
 
-Ribbon是一个客户端负载均衡器，可以很好的控制http和tcp客户端的一些行为。Feign中成了ribbon。
+Ribbon是一个客户端负载均衡器，可以很好的控制http和tcp客户端的一些行为。Feign中集成了ribbon。
 
 ### 1.1 准备
 
