@@ -128,6 +128,21 @@ sorry xxx
 
 说明断路器起到作用。
 
+>
+> **Hystrix中使用重试:**
+> Hystrix不关心被调用者的内部过程，也没有提供内置的重试策略。
+> 可以考虑使用SpringRetry实现重试:
+> https://github.com/spring-projects/spring-retry
+>
+> **Hystrix中使用缓存:**
+> Hystrix提供了缓存功能。
+> 可以通过实现继承`HystrixCommand`，或使用`@CacheResult`等注解使用缓存功能。
+> 使用前需要开启`HystrixRequestContext`，在同一个上下文之间（调用`shutdown()`函数之前）生效，可自定义`getCacheKey`函数。【麻烦】
+>
+> https://segmentfault.com/a/1190000011280116
+> http://blog.csdn.net/zhuchuangang/article/details/74566185
+>
+
 ## 3. Hystrix Dashboard (Hystrix 仪表盘)
 
 #### Hystrix监控
@@ -191,6 +206,7 @@ public class ServiceFeignApplication  {
 
 在复杂的分布式系统中，相同服务的节点经常需要部署成百上千个，很多时候，运维人员希望能够把相同服务的节点状态以一个整体集群的形式展现出来，以更好的把握整个系统的状态。 Netflix提供了一个开源项目（Turbine）来提供把多个hystrix.stream的内容聚合为一个数据源供Dashboard展示。  
 
+
 ---
 
 ## ref
@@ -202,5 +218,9 @@ http://cloud.spring.io/spring-cloud-static/Finchley.M5/single/spring-cloud.html#
 http://blog.csdn.net/forezp/article/details/69934399 （Hystrix）
 
 http://book.itmuch.com/2%20Spring%20Cloud/2.4%20%E7%86%94%E6%96%AD%E5%99%A8.html （Circuit Breaker）
+
+http://www.baeldung.com/spring-retry  Guide to Spring Retry
+
+http://blog.csdn.net/Revivedsun/article/details/53401335 Spring Retry重试功能
 
 </br></br>
