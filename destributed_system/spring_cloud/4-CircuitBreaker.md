@@ -128,7 +128,8 @@ sorry xxx
 
 说明断路器起到作用。
 
->
+<br/>
+
 > **Hystrix中使用重试:**
 > Hystrix不关心被调用者的内部过程，也没有提供内置的重试策略。
 > 可以考虑使用SpringRetry实现重试:
@@ -139,9 +140,11 @@ sorry xxx
 > 可以通过实现继承`HystrixCommand`，或使用`@CacheResult`等注解使用缓存功能。
 > 使用前需要开启`HystrixRequestContext`，在同一个上下文之间（调用`shutdown()`函数之前）生效，可自定义`getCacheKey`函数。【麻烦】
 >
-> https://segmentfault.com/a/1190000011280116
+> https://segmentfault.com/a/1190000011280116 ,
 > http://blog.csdn.net/zhuchuangang/article/details/74566185
->
+ 
+<br/>
+
 
 ## 3. Hystrix Dashboard (Hystrix 仪表盘)
 
