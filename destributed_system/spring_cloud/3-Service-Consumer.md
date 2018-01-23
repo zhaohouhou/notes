@@ -49,6 +49,7 @@ Ribbon是一个客户端负载均衡器，可以很好的控制http和tcp客户�
 在工程的启动类中,通过`@EnableDiscoveryClient`向服务中心注册；并且注入一个bean: `restTemplate`;并通过`@LoadBalanced`注解表明这个`restRemplate`开启负载均衡的功能:
 
 ```java
+@EnableAutoConfiguration
 @SpringBootApplication
 @EnableDiscoveryClient
 public class ServiceRibbonApplication {
@@ -67,7 +68,7 @@ public class ServiceRibbonApplication {
 
 ### 1.4 服务消费者
 
-写一个controller，通过`restTemplate`来消费`service-hi`服务的`"/hi"`接口。这里我们用程序名替代了具体的url地址，ribbon会根据服务名来选择具体的服务实例，根据服务实例在请求的时候会用具体的url替换掉服务名，代码如下：
+写一个controller，通过`restTemplate`来消费`service-hi`服务的`"/hi"`接口。这里我们用程序名替代了具体的url地址，ribbon会根据服务名来选择具体的服务实例，根据服务实例在请求的时候会用具体的url替换掉服务名，示例代码如下：
 
 ```java
 //@RestController：Spring4, 声明返回json字符串数据，可直接编写restfull接口.
@@ -79,9 +80,20 @@ public class HelloControler {
     @Autowired
     RestTemplate restTemplate;
 
-    @RequestMapping(value = "/hi")
+    @RequestMapping(value = "/hi", method = RequestMethod.GET)
     public String hi(@RequestParam String name){
+        //发送GET请求
         return restTemplate.getForObject("http://SERVICE-HI/hi?name=" + name, String.class);
+    }
+
+		@RequestMapping(value = "/hi", method = RequestMethod.POST)
+    public String hiPost(@RequestParam String name){
+        //发送POST请求
+        String url = "http://SERVICE-HI/hi";
+        //HashMap cannot be used for POST requests
+        MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
+        paramMap.add("name", name);
+        return restTemplate.postForObject(url, paramMap, String.class);
     }
 }
 ```
