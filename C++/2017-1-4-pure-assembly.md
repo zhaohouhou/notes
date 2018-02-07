@@ -4,13 +4,15 @@
 
 ### 直接编写.s文件：
 
-	.global foo
+```
+.global foo
 
-	foo:
-		movl	$1, %eax
-		movl	$2, %ecx
-		addl	%ecx, %eax
-		ret
+foo:
+	movl	$1, %eax
+	movl	$2, %ecx
+	addl	%ecx, %eax
+	ret
+```
 
 结果能够正确运行，但`foo`无法被识别为一个函数，并且elf文件头没有大小信息。
 
@@ -20,30 +22,38 @@
 
 ### 使用clang编译（c文件）：
 
-	__attribute__ ((naked)) void foo()
-	{
-    	__asm__("movl	$1, %eax\n"
-        	    "movl	$2, %ecx\n"
-            	"addl	%ecx, %eax\n"
-            	"ret\n");
-	}
+```c
+__attribute__ ((naked)) void foo()
+{
+	__asm__("movl	$1, %eax\n"
+    	    "movl	$2, %ecx\n"
+        	"addl	%ecx, %eax\n"
+        	"ret\n");
+}
+```
 
 成功运行（返回结果为3）
 
 ### VC/C++ 示例:
 
-    __declspec(naked) int  add(int a,int b)  
-    {  
-       __asm mov eax,a  
-       __asm add eax,b  
-       __asm ret   
-    }  
+```c
+__declspec(naked) int  add(int a,int b)  
+{  
+   __asm mov eax,a  
+   __asm add eax,b  
+   __asm ret   
+}
+```
 
 <br/>
 
-    __declspec(naked) int __stdcall function(int a,int b)  
-    {  
-        __asm mov eax,a  
-        __asm add eax,b  
-        __asm ret 8        //注意后面的8  
-    }  
+```c
+__declspec(naked) int __stdcall function(int a,int b)  
+{  
+    __asm mov eax,a  
+    __asm add eax,b  
+    __asm ret 8        //注意后面的8  
+}
+```
+
+<br/><br/>

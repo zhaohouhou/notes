@@ -59,7 +59,7 @@ zuul.routes.feign.serviceId=service-feign
 
 ## 2. 服务过滤
 
-Zuul还可以对请求进行过滤，做一些安全验证。在项目中添加一个`MyFilter`类，对请求进行验证，如果含有token参数则允许请求，否则显示`"token is empty"`。
+Zuul还可以对请求进行过滤，做一些安全验证。在项目中添加Filter类对请求进行过滤。下面的代码实现了ip地址过滤。
 
 ```java
 @Component
@@ -82,28 +82,41 @@ public class MyFilter extends ZuulFilter{
 
     @Override
     public Object run() {
-        RequestContext ctx = RequestContext.getCurrentContext();
-        HttpServletRequest request = ctx.getRequest();
-        log.info(String.format("%s >>> %s", request.getMethod(), request.getRequestURL().toString()));
-        Object accessToken = request.getParameter("token");
-        if(accessToken == null) {
-            log.warn("token is empty");
-            ctx.setSendZuulResponse(false);
-            ctx.setResponseStatusCode(401);
-            try {
-                ctx.getResponse().getWriter().write("token is empty");
-            } catch (Exception e){
-
-            }
-            return null;
+      RequestContext context = RequestContext.getCurrentContext();
+      HttpServletRequest request = context.getRequest();
+      String requestURL = request.getRequestURL().toString();
+      String ip = getIpFromRequest(request);
+      if(!MyConfig.isIpPertmitted(ip)){ //自定义配置类
+          log.warn(String.format("Forbidden ip address: %s", ip));
+          context.setSendZuulResponse(false);
+          context.setResponseStatusCode(401);
+          try {
+              context.getResponse().getWriter().write("Forbidden ip address");
+          }
+          catch (Exception e){}
+          return null;
         }
         log.info("ok");
         return null;
     }
+
+    private String getIpFromRequest(HttpServletRequest request) {
+        String ip;
+        if ((ip = request.getHeader("x-forwarded-for")) != null) {
+            StrTokenizer tokenizer = new StrTokenizer(ip, ",");
+            while (tokenizer.hasNext()) {
+                ip = tokenizer.nextToken().trim();
+            }
+        }
+        else {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
+    }
 }
 ```
 
-其中的函数：
+ZuulFilter类需要实现的函数：
 
   - filterType：返回一个字符串代表过滤器的类型。Zuul中定义了四种生命周期的过滤器类型：
 
@@ -117,7 +130,7 @@ public class MyFilter extends ZuulFilter{
 
   - shouldFilter：是否需要过滤。可以在这里编写逻辑判断
 
-  - run：过滤器的具体逻辑。例如：查寻数据库以判断该请求是否有权限访问。
+  - run：过滤器的具体逻辑。可以比较复杂，例如查寻数据库判断请求是否有权限访问。
 
 ---
 
@@ -130,5 +143,7 @@ http://dockone.io/article/482 （API Gateway ）
 http://book.itmuch.com/2%20Spring%20Cloud/2.6%20API%20Gateway.html （API Gateway：Zuul）
 
 http://blog.csdn.net/forezp/article/details/69939114  路由网关(Zuul)
+
+https://zhuanlan.zhihu.com/p/28376627  深入理解Zuul之源码解析
 
 </br></br>
