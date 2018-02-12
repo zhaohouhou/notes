@@ -43,6 +43,20 @@ struct lmap
 
 而dlopen函数返回的handle正是link_map结构指针，因此可以通过dlopen函数返回值遍历link_map列表。但如果不希望因此加载额外的库，需要调用`dlopen(NULL, RTLD_NOW)`，返回的结构并不直接指向link_map，会稍复杂。【见ref[1]】
 
+------------------
+
+<!--
+IOS防篡改：
+
+1. 通过dladdr函数返回结果验证动态库加载信息：
+需要先获得函数地址；（类方法和实例方法不同？可能会不成功-显示包含在libobjc.A.dylib？）
+
+2. 获取所有库的image_name，进行比对或筛查：需要预先知道会加载哪些库/不会加载哪些库。
+
+3. 函数地址检查：更改后的代码地址可能发生变化。需要预先获得函数在lib中的偏移量（固定），并获得所在lib的加载地址（随机化）。
+
+-->
+
 ## ref:
 
 **[1] http://syprog.blogspot.ru/2011/12/listing-loaded-shared-objects-in-linux.html  Linux查看程序加载的动态库**
@@ -56,5 +70,7 @@ http://www.it72.com/thread-9145.htm iOS远程注入dylib
 http://www.blogfshare.com/inject-with-njb.html iOS dylib注入
 
 https://www.jianshu.com/p/b1822a77b827 iOS dylib注入
+
+http://wiki.jikexueyuan.com/project/ios-security-defense/ iOS 安全攻防
 
 <br/><br/>
