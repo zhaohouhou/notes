@@ -85,6 +85,8 @@ Objective-C编写的.m文件可以使用clang进行编译:
 
 `-framework Fundation`表示引用Fundation框架(`#import <Foundation/Foundation.h>`)。
 
+otool是MAC系统上的反编译工具。类似于objdump的"`objdump -Sl`"命令,`otool -tV`命令能够输出可执行文件的汇编指令。
+
 ## Objective-C 内存管理
 
 Objective-C 中，对象通常是使用 alloc 方法在堆上创建的。 [NSObject alloc] 方法在对堆上分配一块内存，并按照NSObject的内部结构进行填充。
