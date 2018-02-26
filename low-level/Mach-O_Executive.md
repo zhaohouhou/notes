@@ -13,6 +13,8 @@ MACH-O(Mach object file)是一种可执行文件格式，运行在Mach平台上�
 
 - **Header**：基本信息，包括魔数、cpu类型、load command数量和大小等。
 
+  魔数含有该可执行文件的类型信息。Fat文件魔数为cafebabe（32位）和cafebabf（64位）；Mach-O文件魔数为feedface（32位）和feedfacf（64位）。需要注意数据的大小端。
+
 - **Load Commands**：紧接header区域，每一项包含command的类型、segment名称、位置等。
 
   使用`otool -lv`命令可以查看文件头和load commands信息。
