@@ -85,7 +85,24 @@ Objective-C编写的.m文件可以使用clang进行编译:
 
 `-framework Fundation`表示引用Fundation框架(`#import <Foundation/Foundation.h>`)。
 
+## 查看可执行文件
+
 otool是MAC系统上的反编译工具。类似于objdump的"`objdump -Sl`"命令,`otool -tV`命令能够输出可执行文件的汇编指令。
+
+`otool -h FILE_NAME`: 查看基本的头部信息，包括魔数（表示32位或64位）、cpu类型、加载命令(load commands)的数量和大小。
+
+`otool -lv FILE_NAME`显示各段的信息；`otool -s {segment} {section} FILE_NAME`显示section的详细信息。例如：
+
+    otool -s __TEXT __text MyApp
+
+`size`工具在Unix平台均可使用，可查看各段的大小：
+
+    size FILE_NAME
+
+Mac或Linux平台可以使用vim查看二进制文件：
+
+    $ vim FILE_NAME
+    # :%!xxd
 
 ## Objective-C 内存管理
 
