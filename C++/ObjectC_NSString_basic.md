@@ -91,9 +91,11 @@ otool是MAC系统上的反编译工具。类似于objdump的"`objdump -Sl`"命�
 
 `otool -h FILE_NAME`: 查看基本的头部信息，包括魔数（表示32位或64位）、cpu类型、加载命令(load commands)的数量和大小。
 
-`otool -lv FILE_NAME`显示各段的信息；`otool -s {segment} {section} FILE_NAME`显示section的详细信息。例如：
+`otool -lv FILE_NAME`显示各段的信息；`otool -s {segment} {section} FILE_NAME`显示section的详细信息(16进制数据)。例如：
 
     otool -s __TEXT __text MyApp
+
+nm命令可以查看符号表。iOS应用的符号表是strip过的，因此如果要查看iOS符号表需要先进行恢复（http://blog.imjun.net/posts/restore-symbol-of-iOS-app/）。
 
 `size`工具在Unix平台均可使用，可查看各段的大小：
 
