@@ -48,11 +48,13 @@ LLVM基本结构还是典型的“前端-中间表示-后端”的形式。
   <tr>
     <th>libLLVMSupport</th>
     <td>general utilities:
+      <ul> 
       <li> error </li>
       <li> integer and floating point handling </li>
       <li> command-line parsing </li>
       <li> debugging </li>
       <li> etc. </li>
+      </ul> 
     </td>
   </tr>
   <tr>
