@@ -116,7 +116,7 @@ inline bool isInt<8>(int64_t x) {
 
 对于字符串引用，何时应该使用char*、何时使用string类，是C++编程中经常被讨论的问题。LLVM需要管理大量字符串，为了提高效率引入了`StringRef`来引用字符串。下面是几种方式的比较：
 
-<table border="2" align="left">
+<table border="2">
   <tr>
     <th>const char*</th>
     <td> 不能用于本身含有 null 字符的字符串
@@ -132,6 +132,7 @@ inline bool isInt<8>(int64_t x) {
     <td>可以和`const char*`一样传值传参；同时维护字符串大小信息，因此可以包含null字符。</td>
   </tr>
 </table>
+
 
 由于C++11之前拷贝字符串代价较高，LLVM还引入了 `Twine` 类用来处理字符串连结操作：
 仅保存子串的引用，不进行实际的字符串连结。
