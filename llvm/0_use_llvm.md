@@ -48,6 +48,23 @@ LLVM 测试框架由回归测试（regression tests）和 whole programs 两部�
 
 通过的测试例显示`PASS`。
 
+## LLVM Debug Info
+
+如果 LLVM 的 build 模式为 debug 模式，那么使用 `-debug` 参数可以输出 LLVM 编译过程中的调试信息：
+
+    $clang -mllvm -debug test.c
+
+在 LLVM 开发中，若需要添加 debug info，可以使用宏 `DEBUG_WITH_TYPE` (include/llvm/Support/Debug.h)。例如：
+
+```c++
+DEBUG_WITH_TYPE("test",
+    errs() << "TEST: some info: " << value << "\n");
+```
+
+输出类似于：
+
+    TEST: some info: 123
+
 
 ## Ref:
 
