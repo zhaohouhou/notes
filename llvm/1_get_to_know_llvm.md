@@ -48,13 +48,13 @@ LLVM基本结构还是典型的“前端-中间表示-后端”的形式。
   <tr>
     <th>libLLVMSupport</th>
     <td>general utilities:
-      <ul> 
+      <ul>
       <li> error </li>
       <li> integer and floating point handling </li>
       <li> command-line parsing </li>
       <li> debugging </li>
       <li> etc. </li>
-      </ul> 
+      </ul>
     </td>
   </tr>
   <tr>
@@ -76,7 +76,7 @@ Clang:<br/>
 
 ## 3. LLVM 中的 C++
 
-LLVM 的实现中利用了 C++ 的一些语言性质。
+LLVM 的实现中利用了 C++ 的一些语言性质。了解这些性质，不仅有助于我们进行 LLVM 上的开发，也能就如何编写高质量的 C++ 项目为我们提供启发。
 
 #### 3.1. 多态
 
