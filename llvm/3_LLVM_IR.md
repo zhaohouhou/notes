@@ -99,6 +99,31 @@ LLVM local value 的命名以 `%` 开头，global value 以 `@` 开头。
 
   Iterates over values. Obtained by `op_begin()` and `op_end()`
 
+#### 向 BasicBlock 中插入 Instruction
+
+LLVM 中可以方便地在新建 Instruction 的同时将其插入到 BasicBlock 中。例如（<font color="red">注意插入的位置</font>）：
+
+```c++
+LoadInst x,y = ...
+Instruction * p = ...
+BasicBlock::iterator itr = ...
+BasicBlock * bb = ...
+
+//插入到指针 p 之前
+BinaryOperator op1 = BinaryOperator::Create(Instruction::Add,
+	 						(Value *)x, (Value *)y, "", p);
+//插入到 iterator itr 之前
+BinaryOperator op2 = BinaryOperator::Create(Instruction::Add,
+	 						(Value *)x, (Value *)y, "", &*itr);
+//插入到基本块 bb 结尾
+BinaryOperator op3 = BinaryOperator::Create(Instruction::Add,
+	 						(Value *)x, (Value *)y, "", bb);
+```
+
+BasicBlock 的 `begin()`、 `end()` 函数返回 `BasicBlock::iterator`，
+iterator 上可以进行 `++` 和 `--` 操作。`getTerminator()` 函数返回位于 BasicBlock 末尾的 terminator 指令；如果没有 terminator 指令或者 BasicBlock 末尾的指令不是 terminator，则返回空指针。
+
+在对基本块进行修改时，需要注意维持 IR 的一些性质。例如 phi node 需要在基本块最开始、控制转移需要在基本块末尾等。
 
 ### Types
 
@@ -145,6 +170,10 @@ reduces code size further
 
 
 ## ref:
+
+官方手册：
+
+http://llvm.org/docs/ProgrammersManual.html
 
 参考书：《Getting Started with LLVM Core Libraries》
 

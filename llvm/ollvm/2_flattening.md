@@ -13,7 +13,7 @@
 
 2. 用一个 `switch` 结构封装所有的基本块，使得每个块对应一个 单独的 `case`；而整个`switch` 结构又被一个循环包装起来。
 
-3. `switch` 结构的条件变量作为控制变量，维护原执行流的信息。在每个基本块结束设置控制变量的值，使得下一次循环执行到正确的块。
+3. `switch` 结构的条件变量作为控制变量，维护原执行流的信息。在每个基本块结束前设置控制变量的值，使得下一次循环执行到正确的块。
 
 ![](flattening.png)
 
@@ -21,7 +21,7 @@
 
 Flattening 的具体代码在文件 `lib/Transforms/Obfuscation/Flattening.cpp` 中。
 
-**runOnFunction()**：重载`FunctionPass`类的接口函数。先判断是否要进行平坦化，调用函数`flatten()`进行混淆。
+**runOnFunction()**：重载 `FunctionPass` 类的接口函数。先判断是否要进行平坦化，调用函数`flatten()`进行混淆。
 
 **flatten()**：具体的执行流平坦化逻辑。过程如下：
 
@@ -31,7 +31,7 @@ Flattening 的具体代码在文件 `lib/Transforms/Obfuscation/Flattening.cpp` 
 
 3. 处理 switch 结构的分支：将所有基本块至于 switch 结构内部并添加为一个 case。
 
-4. 每个分支结尾插入修改条件变量 switch variable 的逻辑。根据 block 的 terminator 类型的不同，处理方式分别为：
+4. 每个分支插入修改条件变量 switch variable 的逻辑。根据 block 的 terminator 类型的不同，处理方式分别为：
 
     - ret（后继节点数量为0）：不需要处理
 
@@ -43,7 +43,7 @@ Flattening 的具体代码在文件 `lib/Transforms/Obfuscation/Flattening.cpp` 
 
         3). 找到后继节点在 switch 结构中对应的 case number。如果是 default case、没有 case number，则随机新建一个在 case 值范围之外的 case number，这样程序执行时便能在下一次 loop 正确地落入 default 分支。
 
-        4). 插入 `StoreInst` 语句，使 block 执行结尾将 switch variable 的值更新为上一步中找到的 case number，从而保持执行流的正确。
+        4). 插入 `StoreInst` 语句，使 block 结尾将 switch variable 的值更新为上一步中找到的 case number，从而保持执行流的正确。
 
         5). 插入 `BranchInst` 以跳转至 loop 结构。
 
@@ -61,7 +61,7 @@ Flattening 的具体代码在文件 `lib/Transforms/Obfuscation/Flattening.cpp` 
 
 ## ref:
 
-T László and Á Kiss, ** *Obfuscating C++ programs via control flow flattening* **, Annales Univ. Sci. Budapest., Sect. Comp. 30 (2009) 3-19.
+T László and Á Kiss, ** *Obfuscating C++ programs via control flow flattening* ** , Annales Univ. Sci. Budapest., Sect. Comp. 30 (2009) 3-19.
 
 https://github.com/obfuscator-llvm/obfuscator/wiki/Control-Flow-Flattening
 
