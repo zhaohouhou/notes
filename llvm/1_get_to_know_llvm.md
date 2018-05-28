@@ -15,6 +15,35 @@ LLVM的目标是能够为任意编程语言提供编译支持。LLVM采用了前
 
 Clang和LLVM的安装可以按照 clang.llvm.org 中的步骤，从源码build。
 
+## 0. 编译安装 LLVM
+
+下面介绍如何在 Unix 类的系统上从源码 build LLVM 和 Clang 项目。
+
+1. 编译项目要求装有以下软件：GNU Make，GCC，python（自动化测试需要），CMake。
+
+2. 获取 LLVM 代码。在需要建立 llvm 的上层目录：
+
+        $svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm
+
+3. 获取 Clang 代码:
+
+        $cd llvm/tools
+        $svn co http://llvm.org/svn/llvm-project/cfe/trunk clang
+        $cd ../..
+
+4. 编译 LLVM 和 Clang。首先为编译项目新建目录（不能 in-tree build）：
+
+        $mkdir build
+        $cd build
+
+    以 debug 模式编译 LLVM 和 Clang：
+
+        $cmake -G "Unix Makefiles" ../llvm
+        $make
+
+编译成功后，生成的程序位于 build/bin 目录。包括 clang、clang++、opt（优化工具）等等。
+
+
 ## 1. 基本结构
 
 LLVM基本结构还是典型的“前端-中间表示-后端”的形式。

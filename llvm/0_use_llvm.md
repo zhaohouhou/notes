@@ -83,6 +83,8 @@ LLVM 测试框架由回归测试（regression tests）和 whole programs 两部�
 
 如果 clang 在编译时找不到 libc 头文件，可以修改环境变量使 libc 查找路径指向正确的目录下（libc.a 所在目录）。环境变量 `LD_LIBRARY_PATH` (`DYLD_LIBRARY_PATH` on OS X)。
 
+编译出的 clang++ 可能找不到 libc++ 的基本头文件。可以使用 `-v` 参数查看 include 文件的 search 路径。如果安装了 libc++ 还是不能找到相应头文件，可以编译时通过 `-I` 手动包含正确的 search 路径。
+
 
 ## Ref:
 

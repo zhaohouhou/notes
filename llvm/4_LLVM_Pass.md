@@ -108,9 +108,11 @@ static RegisterPass<Hello> X("hello", "Hello World Pass");
 在 lib/Transforms/IPO/PassManagerBuilder.cpp 中添加：
 
 ```c++
- static cl::opt<bool> Hello("hello", cl::int(false),
+ static cl::opt<bool> Hello("hellopass", cl::int(false),
     cl::desc("Enable Hello World pass"),
 ```
+
+此处的参数名称需要与前面 Hello.cpp 中的 `static RegisterPass` 中的参数不同，否则运行 opt 会报错 "Option registered more than once" 无法运行。
 
 仍旧是该文件，在函数 `void PassManagerBuilder::populateModulePassManager` 中添加：
 

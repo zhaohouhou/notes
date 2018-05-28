@@ -15,7 +15,7 @@ Ollvm 使用的 always true 条件为 `y < 10 || x *(x + 1)%2 == 0`，其中 x �
 
 ### 代码分析
 
-Bogus Control Flow 具体的变换代码在文件`lib/Transforms/Obfuscation/BogusControlFlow.cpp`中。
+Bogus Control Flow 具体的变换代码在文件  `lib/Transforms/Obfuscation/BogusControlFlow.cpp` 中。
 
 - `runOnFunction()`：重载`FunctionPass`类的接口函数。先判断函数是否需要混淆（`Utils.cpp`->`toObfuscate()`），再调用函数`bogus()`进行混淆，最后调用`doF()`进行处理。
 
