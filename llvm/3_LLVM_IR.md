@@ -42,6 +42,10 @@ int sum(int x, int y) {
 
     $ clang sum.c -emit-llvm -c -o sum.bc
 
+使用 llc 工具（LLVM build 生成）可以将字节码文件编译为可执行文件：
+
+    $ llc -filetype=obj sum.bc
+
 生成 LLVM assembly 文件：
 
     $ clang sum.c -emit-llvm -S -c -o sum.ll

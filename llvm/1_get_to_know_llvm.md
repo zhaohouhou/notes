@@ -41,6 +41,8 @@ Clang和LLVM的安装可以按照 clang.llvm.org 中的步骤，从源码build�
         $cmake -G "Unix Makefiles" ../llvm
         $make
 
+    如果需要编译 release 版本（文件大小相对于 debug 版本小很多），可在调用 cmake 命令时添加参数 `-DCMAKE_BUILD_TYPE=Release`。
+
 编译成功后，生成的程序位于 build/bin 目录。包括 clang、clang++、opt（优化工具）等等。
 
 
