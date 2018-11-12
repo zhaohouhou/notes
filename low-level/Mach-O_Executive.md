@@ -95,6 +95,7 @@ Load command 紧接`mach_header`，开头必须包含`cmd`和`cmdsize`两个字�
 
 - **__LINKEDIT segment** 包含了动态链接器的原始数据，如符号、字符串和重定位的表的入口。
 
+
 ## 附：数据结构
 
 Mach-O文件的相关数据结构（参考`<mach-o/loader.h>`文件）：
