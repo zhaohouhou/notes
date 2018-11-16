@@ -115,8 +115,8 @@ typedef struct class_rw_t {
 
     const class_ro_t *ro;
 
-    struct method_list_t **methods;
-    struct chained_property_list *properties;
+    struct method_list_t **methods;  //实际运行时数据结构有出入
+    struct chained_property_list *properties; //实际运行时数据结构有出入
     struct protocol_list_t ** protocols;
 
     struct class_t *firstSubclass;
