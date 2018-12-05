@@ -7,8 +7,12 @@ from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 
 
 class Server(BaseHTTPRequestHandler):
-    
-
+	
+    def do_GET(self):
+        query_string = urllib.parse.unquote(self.path.split('?', 1)[1])  # path/arg1=123&arg2=456
+        args = dict(urllib.parse.parse_qsl(query_string))       # {'arg1': '123', 'arg2': '456'}
+        ...
+	
     def do_POST(self):
         query_string = self.rfile.read(int(self.headers['Content-Length']))
         args = dict(urlparse.parse_qsl(query_string))
