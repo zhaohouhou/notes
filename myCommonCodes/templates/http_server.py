@@ -27,6 +27,8 @@ class Server(BaseHTTPRequestHandler):
                          response
                          )
         self.end_headers()
+	
+# RequestHandler 的实例是每次接到请求new一个，因此其依赖的变量等可以使用全局的
         
         
 # start:
