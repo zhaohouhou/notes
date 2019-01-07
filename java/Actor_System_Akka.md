@@ -69,3 +69,21 @@ public class HelloWorld {
     }
 }
 ```
+
+### Stopping Actors
+
+Actors are stopped by invoking the stop method of a `ActorRefFactory`, i.e. `ActorContext` or `ActorSystem`. Typically the context is used for stopping the actor itself or child actors and the system for stopping top level actors. The actual termination of the actor is performed asynchronously, i.e. stop may return before the actor is stopped.
+
+Actor 会在处理完当前的的message之后停止，且不再处理之后的message。
+
+停止的具体过程：
+1. actor停止处理 mailbox，并且向所有的children发送 stop； 
+2. 收集到所有 children 的停止信号之后，再终止自身。(调用`postStop()` 方法，dumping mailbox, publishing Terminated on the DeathWatch, telling its supervisor)
+
+通过重载 `postStop()` 方法可以对资源进行清理, `postStop()` 方法会在actor彻底停止后被调用。
+
+## ref:
+
+https://doc.akka.io/docs/akka/2.5/actors.html
+
+
