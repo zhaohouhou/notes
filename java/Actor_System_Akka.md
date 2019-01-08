@@ -27,22 +27,6 @@ Actor路径使用类似于URL的方式来描述一个Actor,Actor Path在一个Ac
 （推荐的方式：） 定义 Actor class，并通过一个静态工场方法创建 Props instance，
 
 ```java
-import akka.actor.UntypedAbstractActor;
-
-//akka 2.5版本之后推荐使用AbstractActor并实现 createReceive() 方法，
-public class MyActor extends UntypedAbstractActor {
-    private int x;
-
-    public MyActor(int x) {
-        this.x = x;
-    }
-    
-    /**
-     * Create Props for an actor of this type.
-     */
-    public static Props props(final int x) {
-        return Props.create(new Creator<MyActor>() {
-            private static final long serialVersionUID = 1L;
 
             @Override
             public MyActor create() throws Exception {
@@ -68,6 +52,19 @@ public class HelloWorld {
         actor.tell("good morning", ActorRef.noSender());
     }
 }
+```
+
+获取 Actor 引用
+
+```java
+ActorSystem system = ...;
+String actorName = ...;
+Timeout TIMEOUT = new Timeout(1000, TimeUnit.MILLISECONDS);
+
+ActorSelection selection = system.actorSelection(actorName);
+Future<ActorRef> future = selection.resolveOne(TIMEOUT);
+ActorRef result = Await.result(future, TIMEOUT.duration());
+...
 ```
 
 ### Stopping Actors
