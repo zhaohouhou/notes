@@ -23,6 +23,68 @@ Component 的查找路径是从 SpringBootApplication 类所处目录的子目�
 
 - controller 类没成功注入（没找到这个 Component）
 
+### BeanFactory 实现 Singleton
+
+下面的方法可以在运行时建立单例的 bean，并且设置一些参数。
+
+1. bean class （with a 'name' field）
+
+```java
+public class PrototypeBean {
+    private String name;
+     
+    public PrototypeBean(String name) {
+        this.name = name;
+        logger.info("Prototype instance " + name + " created");
+    }
+ 
+    //...
+}
+```
+
+2. inject a bean factory into a singleton bean by making use of the `java.util.Function` interface
+
+```java
+public class SingletonFunctionBean {
+     
+    @Autowired
+    private Function<String, PrototypeBean> beanFactory;
+     
+    public PrototypeBean getPrototypeInstance(String name) {
+        PrototypeBean bean = beanFactory.apply(name);
+        return bean;
+    }
+}
+```
+
+3. define the factory bean, prototype and singleton beans in configuration:
+
+```java
+@Configuration
+public class AppConfig {
+    @Bean
+    public Function<String, PrototypeBean> beanFactory() {
+        return name -> prototypeBeanWithParam(name);
+    } 
+ 
+    @Bean
+    @Scope(value = "prototype")
+    //singleton：单例模式，在整个Spring IoC容器中，使用singleton定义的Bean将只有一个实例
+    //prototype：原型模式，每次通过容器的getBean方法获取prototype定义的Bean时，都将产生一个新的Bean实例
+    //request：对每次HTTP请求，使用request定义的Bean都将产生一个新实例。在Web应用中使用Spring时该作用域才有效
+    public PrototypeBean prototypeBeanWithParam(String name) {
+       return new PrototypeBean(name);
+    }
+     
+    @Bean
+    public SingletonFunctionBean singletonFunctionBean() {
+        return new SingletonFunctionBean();
+    }
+    //...
+}
+```
+
+
 ### ref:
 
 SpringBoot URL 映射: 
@@ -34,3 +96,5 @@ testing with mvc:
 - https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-testing.html
 
 - https://docs.spring.io/spring/docs/current/spring-framework-reference/testing.html#spring-mvc-test-framework
+
+https://www.baeldung.com/spring-inject-prototype-bean-into-singleton
