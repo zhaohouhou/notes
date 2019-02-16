@@ -13,6 +13,31 @@ Autowired 和 static method/block 配合使用很容易出错。
 Component 的查找路径是从 SpringBootApplication 类所处目录的子目录查找。
 如果需要注入的类不在相应目录中，需要在 SpringBootApplication 的类上添加 ComponentScan 注释莱指明要进行查找的目录。
 
+### `@ResponseBody` and `ResponseEntity`
+
+- `@ResponseBody` 注解：在方法上添加该注解，Spring 会将函数返回的对象转换成 http response body。
+
+- `ResponseEntity`：和 `@ResponseBody` 作用类似。通过 `ResponseEntity` 可以灵活地定义其他 response 信息，
+例如 header 和 status code 等。
+
+- 如果使用了 `ResponseEntity` 作为返回对象，则不需要载使用 `@ResponseBody` 注解。
+
+例子：
+
+```java
+@RequestMapping(value = "/message")
+@ResponseBody
+public Message get() {
+    return new Message("AAA");
+}
+
+@RequestMapping(value = "/message")
+ResponseEntity<Message> get() {
+    Message message = new Message("BBB");
+    return new ResponseEntity<Message>(message, HttpStatus.OK);
+}
+```
+
 ### 404
 
 测试请求如果返回意外的 404 错误（hostname和改变端口号产生的是不一样的错误），可能原因：
@@ -23,7 +48,8 @@ Component 的查找路径是从 SpringBootApplication 类所处目录的子目�
 
 - controller 类没成功注入（没找到这个 Component）
 
-### BeanFactory 实现 Singleton
+
+### BeanFactory 创建 bean
 
 下面的方法可以在运行时建立单例的 bean，并且设置一些参数。
 
