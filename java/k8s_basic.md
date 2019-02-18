@@ -20,22 +20,32 @@ Kubernetes 特点
 
 ## 2. Basic concepts
 
-1. 节点（Nodes）：Kubernetes 是由一组节点组成，这些节点可以是物理主机，也可以是虚拟机，
+1. **节点（Nodes）**：Kubernetes 是由一组节点组成，这些节点可以是物理主机，也可以是虚拟机，
 节点上运行 Docker，kubelet，kube-proxy 等服务。Kubernetes 平台运行这些节点之上，构成了集群。
 Kubernetes集群分为两种Node：Master Node 和用于实际部署的 Pod 的工作 Node。
 一个集群往往由几个 Master Node 控制着整个集群的所有Node。
 
-2. 容器集（Pod）：Pod 是 Kubernetes 中能够创建和部署的最小单元，是 Kubernetes 集群中的一个应用实例。Pod中包含了一个或多个容器，还包括了存储、网络等各个容器共享的资源。Pod 在单个节点上运行（但是一个节点可以运行许多Pod），这意味着Pod 中的所有容器将具有相同的IP地址，并且可以通过 localhost 上的端口来相互通信。Pod 在部署后无法更新，只能删除或替换。
+2. **容器集（Pod）**：Pod 是 Kubernetes 中能够创建和部署的最小单元，是 Kubernetes 集群中的一个应用实例。
+Pod中包含了一个或多个容器，还包括了存储、网络等各个容器共享的资源。
+Pod 在单个节点上运行（但是一个节点可以运行许多Pod），这意味着Pod 中的所有容器将具有相同的IP地址，
+并且可以通过 localhost 上的端口来相互通信。Pod 在部署后无法更新，只能删除或替换。
 
     除非容器之间耦合严重，一般使用单容器 Pod。
 
-3. 部署（Deployments）: Deployment 为 Pod 和 ReplicaSet 提供了一个声明式定义(declarative)方法，来方便的管理应用。典型的应用场景包括：
+
+3. **服务（Services）**：Kubernetes Service 定义了一组 Pods 和它们的访问方式。
+
+4. **部署（Deployments）**: Deployment 为 Pod 和 ReplicaSet 提供了一个声明式定义(declarative)方法，
+来方便的管理应用。典型的应用场景包括：
 
     - 定义 Deployment 来创建 Pod 和 ReplicaSet
     - 滚动升级和回滚应用
     - 扩容和缩容
     - 暂停和继续 Deployment
 
+## 使用YAML创建一个 Kubernetes Depolyment
+
+YAML 是一个 Json 的超集, 使用YAML进行k8s配置具有便捷性、可维护性和灵活性。Yaml 有 List 和 Map 两种数据类型。
 
 
 
@@ -43,3 +53,7 @@ Kubernetes集群分为两种Node：Master Node 和用于实际部署的 Pod 的�
 
 
 https://www.kubernetes.org.cn/k8s
+
+https://www.kubernetes.org.cn/1414.html  使用YAML创建一个 Kubernetes Depolyment
+
+http://dockone.io/article/8108  Kubernetes basic
