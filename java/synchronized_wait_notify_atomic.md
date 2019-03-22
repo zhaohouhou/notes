@@ -1,5 +1,5 @@
 
-# Java concurrency: synchronized wait notify
+# On Java concurrency
 
 ## synchronized 实现同步互斥
 
@@ -103,8 +103,54 @@ public class TestConsumer {
 
 ## volatile & Atomic
 
+### volatile 关键字（after Java 5）
 
+The Java `volatile` keyword is used to mark a Java variable as "being stored 
+in main memory" (see java-memory-model). All writes to the variable will be 
+written back to main memory immediately; all reads of the variable will be read 
+directly from main memory. Declaring a variable volatile guarantees the
+ *visibility* for other threads of writes to that variable (otherwise different
+  reader thread may see different values.）
 
+除了 visibility 保证, volatile 还通知 java compiler 在编译优化（会发生指令重排）的过程中
+提供 "happens-before（有序性）" 保证:
+
+1. 对其他变量的读写如果发生在写 volatile 变量之前，则不能被移动到写 volatile 变量操作之后。
+反方向的移动是可以的。
+
+2. 对其他变量的读写如果发生在读 volatile 变量之后，则不能被移动到读 volatile 变量操作之前。
+反方向的移动是可以的。
+
+（写 volatile 变量之前需保证所有前面的写操作已经生效；
+而读取 volatile 变量的操作生效后才可以进行后面的读操作。）
+
+```Java
+int a, b, c;
+volatile int v;
+
+a = c; v = b;     =>   v = b; a = c;   // ×
+v = b; a = c;     =>   a = c; v = b;   // √
+
+a = b; b = v;     =>   b = v; a = b;   // √
+b = v; a = c;     =>   a = c; b = v;   // ×
+```
+
+其他：
+- 在Java中，对基本数据类型的变量的读取和赋值操作是原子性操作；
+而 `volatile` 可以用于 32 和 64 位数据类型的变量。
+
+- `volatile` 不能提供 "get-and-set" 的原子性，例如 `v++`。此时可使用 `Atomic` classes, 
+例如 `AtomicInteger` 和 `AtomicReference`。（如果只是分别用 get 和 set，则 
+`AtomicReference` reference 和 `volatile` 一样。）
+
+- 由于每次读写 volatile 变量都需要访问 main memory，代价比访问 CPU cache 高很多。
+此外限制指令重排会影响编译优化。
+
+## ref:
+
+http://tutorials.jenkov.com/java-concurrency/volatile.html
+
+http://tutorials.jenkov.com/java-concurrency/java-memory-model.html
 
 
 </br></br>
