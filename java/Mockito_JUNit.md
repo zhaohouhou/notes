@@ -190,7 +190,10 @@ Mockito.verify 可以对性为进行验证：
     verify(daoSpy, never()).delete(any(Customer.class));
     ```
 
-ref:
+Note: `verify()` 不会重置方法的状态计数，可以使用 `reset(mockObject)` 重置状态。 (尽量避免)
+
+
+## ref:
 
 https://www.tutorialspoint.com/mockito/index.htm
 
