@@ -18,11 +18,11 @@ Initialization of members in classes works identically to initialization of loca
 For **objects**, their default constructor is called. For example, for std::string, the default constructor sets it to an empty string. If the object's class does not have a default constructor, it will be a compile error if you do not explicitly initialize it.
 
 For **primitive types** (pointers, ints, etc), they are not initialized -- they contain whatever arbitrary junk happened to be at that memory location previously.
-(即, C++默认不会把类或结构体成员初始化为"0",如果需要默认值为0的指针或基本类型变量, 需要显示在类的定义或构造函数中写明.)
+(即, C++默认不会把类或结构体成员初始化为"0",如果需要默认值为0的指针或基本类型变量, 需要显式在类的定义或构造函数中写明.)
 
 For **references** (e.g. std::string&), it is illegal not to initialize them, and your compiler will complain and refuse to compile such code. References must always be initialized.
 
-In summary, 当没有显示地初始化时, 成员变量的值:
+In summary, 当没有显式地初始化时, 成员变量的值:
 
 ```c++
     int *ptr;  // Contains junk
@@ -105,7 +105,7 @@ int main()
 
 <font color=red>注意：</font> 
 
-- 显示申明构造函数、析构函数一定要有定义，例如空函数体 (base类的虚函数也需要加函数体)。否则链接会报 undefined reference。
+- 显式申明构造函数、析构函数一定要有定义，例如空函数体 (base类的虚函数也需要加函数体)。否则链接会报 undefined reference。
 
 - 只有虚函数可以重载.
 
