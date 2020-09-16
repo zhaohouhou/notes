@@ -68,7 +68,7 @@ Thread类的`Thread.State getState()`方法返回线程状态。相关的oracle�
 
 
 
-### 3. 进程调度
+### 3. 线程调度
 
 #### 等待线程执行完成：
 
@@ -96,3 +96,26 @@ for (Thread thread : array)
 }
 
 ```
+
+### 4. 线程池
+
+#### 基本使用
+
+固定大小线程池： Executors.newFixedThreadPool(n) => submit() => shutdownNow()
+
+周期任务、延时任务： Executors.newScheduledThreadPool(n) => schedule()/scheduleAtFixedRate() => shutdownNow()
+
+#### 基本原理
+
+ThreadPoolExecutor: BlockingQueue 任务队列。
+
+ScheduledThreadPoolExecutor (extends ThreadPoolExecutor): 
+
+1. 包装类：如果task执行后需要重新schedule，再放入到workQueue里面。
+2. 优先队列：workQueue是一个DelayedWorkQueue，实现了堆的数据结构。
+
+#### 其他 topic
+
+1. reject policy: AbortPolicy，CallerRunsPolicy，DiscardPolicy, DiscardOldestPolicy...
+2. hooker: beforeExecute, afterExecute
+3. 等待队列：避免使用无线长度的队列以占用太多内存。。。
