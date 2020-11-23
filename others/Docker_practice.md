@@ -83,7 +83,7 @@ https://docs.docker.com/install/overview/
 | docker rm CONTAINER_ID | 删除容器 |
 | docker run IMAGE_NAME	| 建立image的一个容器并启动它 |
 | docker start/stop/restart/kill | CONTAINER_NAME	启动/关闭/重启/杀掉容器 |
-| docker save IMAGE_ID -o FILE_NAME.tar <REPOSITORY:TAG> | image打包（本地需要有这个image） |
+| `docker save IMAGE_ID -o FILE_NAME.tar <REPOSITORY:TAG>` | image打包（本地需要有这个image） |
 | docker rename OLD_NAME NEW_NAME	| 重命名容器 |
 | docker attach CONTAINER_NAME	| 进入一个后台运行的容器终端（退出后容器会停止）.退出容器使用exit命令 |
 | docker cp [OPTIONS] $SRC $DEST | 拷贝文件. src和dest前加<containerID/containerName:>来指明是对container中的目标做操作. e.g.:  `docker cp containerId:/foo.txt foo.txt` |
