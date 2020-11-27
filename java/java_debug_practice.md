@@ -81,9 +81,53 @@ stack 信息中， C开头的是 native frame， J 开头的是 java frames。�
 gdb 也可以 attach 到运行中 java app。
 还可以启动 java 程序时加参数 `-XX:OnError="gdb — %p" ` 在运行出错时自动启动 gdb。
 
+## 3. Debug leak in direct memory
+
+Java direct 内存泄露是泄露在 heap 之外,现象是 htop 查看程序所占内存比 heap 要大很多(正常heap之外大概200M左右).
+pmap 可以查看进程内存 memory map 状况.
+
+### jemalloc
+
+jemalloc 是 malloc 的一个替代实现, 能够trace malloc的调用, 可以用来做 heap profiling.
+
+1. get jemalloc: https://github.com/jemalloc/jemalloc.git 获取源码.运行:
+
+  ```
+  ./configure --enable-prof   # profile需要这个. 不然Invalid conf pair
+  make
+  make install
+  ```
+
+2. 运行要profile的程序之前,设置环境变量(设置为临时的,不然一直用这个malloc了):
+
+  ```
+  export LD_PRELOAD=$JEMALLOC_INSTALL_PATH/lib/libjemalloc.so
+  export MALLOC_CONF="prof:true,lg_prof_sample:17,lg_prof_interval:30"
+  ```
+  其中:
+  - lg_prof_sample: 分配多少(2^lg_prof_sample)byte数据进行一次采样.默认为512 KiB (2^19 B).
+  - lg_prof_interval: 分配多少(2^lg_prof_sample)byte数据进行一次快照.默认为-1 (disabled).
+  
+3. 运行程序,生成一堆 jeprof.pid.x.x.heap 文件.
+
+### jeprof
+
+jeprof 是 jemalloc 工具的一部分, 可以将 profile 结果可视化. 下面的命令可以把生成的heap dump(和trace信息)画成图:
+
+```
+jeprof --show_bytes --pdf `which $PROGRAM` jeprof.xxxxx.x.x.heap > out.pdf
+```
+notes:
+
+- 这都是C程序了, 所以画出来的也是C函数, 还得再分析对应到 java 哪里
+- 程序可以不停, 按trace信息 attach 上去 debug.
+
+###  其他工具: gperftools
 
 # ref
 
-https://www.bookstack.cn/read/rocksdb-en/e4f46b8585612202.md
+- https://www.bookstack.cn/read/rocksdb-en/e4f46b8585612202.md
+- https://github.com/jemalloc/jemalloc/blob/dev/INSTALL.md
+- https://github.com/jemalloc/jemalloc/wiki/Use-Case:-Leak-Checking
 
 https://www.oracle.com/java/technologies/javase/6hotspotvm.html
