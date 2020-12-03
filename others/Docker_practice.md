@@ -103,6 +103,14 @@ docker run 常用参数:
 
 ## 4. some debug practice with docker
 
+### container 资源占用日志
+
+docker stats 可以实时监控 container 的资源使用情况。下面的命令可以每2分钟把容器 MY_CONTAINER 的资源使用情况 append 到日志:
+
+```
+while true; do docker stats --no-stream MY_CONTAINER | cat >> ./`date -u +"MY_CONTAINER-%Y%m%d.csv"`; sleep 120; done
+```
+
 ### 在容器中使用 gdb attach 到进程
 
 直接在 docker 容器中用 gdb attach 运行中进程可能会报错:
