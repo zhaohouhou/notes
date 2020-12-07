@@ -119,6 +119,8 @@ jeprof --show_bytes --pdf `which $PROGRAM` jeprof.xxxxx.x.x.heap > out.pdf
 ```
 notes:
 
+- $PROGRAM 是程序运行命令。例如c程序"./a.out"，java 程序 "java -jar app.jar".
+- 画 pdf 需要系统里有graphviz(for dot) 和 ghostscript(for ps2pdf). (sudo apt-get install ...)
 - 这都是C程序了, 所以画出来的也是C函数, 还得再分析对应到 java 哪里
 - 程序可以不停, 按trace信息 attach 上去 debug.
 
