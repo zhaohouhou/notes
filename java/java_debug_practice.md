@@ -31,6 +31,8 @@ visualvm可以查看每个object被哪些东西引用，还可以计算retained�
 - gc以及各个区的状态： `jstat -gc -t $pid [$print_interval_ms] [$times_to_print]`
 
   各个区域内存大小的时间单位为 KB
+  
+  加上时间一起输出日志: `watch -n 1 'date "+%Y-%m-%d %H:%M:%S" >> gc_log.txt; jstat -gc $PID >> gc_log.txt'`
 
 ### 1.4 查看程序运行状态
 
