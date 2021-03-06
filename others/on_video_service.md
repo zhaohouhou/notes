@@ -29,3 +29,69 @@ RTSP defines control sequences useful in controlling multimedia playback. While 
 - REDIRECT
 
 ref: （https://en.wikipedia.org/wiki/Real_Time_Streaming_Protocol）
+
+# Video Encoding, Decoding, and Transcoding
+
+**Codec = COder + DECoder**
+
+## Video Encoding
+
+Live video encoding is the process of compressing large, raw video and audio files so that they use less network bandwidth. 
+Compression significantly reduces the bandwidth required, making it possible for real-time video streams or files to be easily 
+transmitted across constrained networks such as the public internet.
+
+When working with file-based video encoding, encoders are used to compress and reduce the size of video content
+so that it can take up less storage space and be easier to transfer.
+
+Compression algorithms (known as codecs) such as H.264/AVC or H.265/HEVC an reduce the raw content data by as much as 1,000 times.
+
+Hardware encoders: low latency. Software encoders: don’t offer ultra low latency levels comparable to dedicated hardware encoders, not suitable for live broadcast applications.
+
+## Video decoding
+
+video decoding is the process of decoding or uncompressing encoded video in real-time.
+
+## Video transcoding
+
+Video transcoding is the process of converting an encoded stream from one format to another, or from one size to another. The source video can either be real-time or file-based. Most transcoders use a two-step process of decoding and re-encoding.
+
+## FFmpeg
+
+FFmpeg is the leading multimedia framework, able to decode, encode, transcode, mux, demux, stream, filter and play pretty much anything that humans and machines have created. It supports the most obscure ancient formats up to the cutting edge.
+
+It contains libavcodec, libavutil, libavformat, libavfilter, libavdevice, libswscale and libswresample which can be used by applications. As well as ffmpeg, ffplay and ffprobe which can be used by end users for transcoding and playing.
+
+# Container
+
+Container 文件: 一些媒体文件可以同时携带视频和音频信息，例如.avi (Microsoft AVI files)、.mov (Apple QuickTime files)、MP4等container format。
+
+container文件将视频和音频块交织地放在一起，典型结构为：
+
+```
+file header
+  title, creator, other meta-info
+  video header
+    video codec FourCC
+    width, height, colorspace, playback framerate
+  audio header
+    audio codec FourCC
+    bits/sample, playback frequency, channel count
+file data
+  encoded audio chunk #0
+  encoded video chunk #0
+  encoded audio chunk #1
+  encoded video chunk #1
+  encoded audio chunk #2
+  encoded video chunk #2
+  encoded audio chunk #3
+  encoded video chunk #3
+   ...
+```
+
+FourCC code标志音视频具体的编码类型。
+
+Summary：
+
+- 创建多媒体文件：1）使用编码器（coder）编码音视频数据。2）使用muxer将音视频流封装成container 文件。
+- 播放多媒体文件：1）使用demuxer拆分音视频流，即解封装。2）使用decoder解码音视频数据。
+
