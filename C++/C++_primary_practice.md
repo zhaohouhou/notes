@@ -133,6 +133,35 @@ public:
     virtual ~Derive(){};
 };
 ```
+## C/C++内存profile工具:Valgrind +Massif
 
+https://www.valgrind.org/
 
+https://www.valgrind.org/docs/manual/ms-manual.html#ms-manual.running-massif
 
+可以运行时快照内存状态: 哪里申请了内存?占比多少? 从比例变化能看出来哪里可能有问题.
+
+(但是由于Valgrind运行会比较慢, 和运行时的实际表现可能是不一样的,需要注意)
+
+基本使用
+
+- valgrind --tool=massif my_program   # 运行程序并使用 massif 工具分析内存使用. 运行停止后会生成一个massif.out.<pid>文件
+- ms_print massif.out.12345  # pretty print 快照文件
+- 默认列出call stack的阈值为内存占用百分之1%以上, 有时需要更细粒度的调用栈信息, 可以在 massif 和 ms_print 时使用参数:
+    ```
+    --threshold=<m.n> [default: 1.0]
+    ```
+
+- 如果要分析sub-processes的内存使用, 增加valgrind 参数 --trace-children=yes. (fork()的内存由于共享memory map,是一同监控的)(一般不需要..)
+
+## 编译器 sanity check 工具
+
+clang 3.1 和 gcc 4.8 之后内置了 sanity check 工具.
+
+使用方式: 在编译和链接时添加 `-fsanitize=address` 选项, 运行时如果发现了内存使用的错误会打印到标准输出.
+
+ref:
+
+https://github.com/google/sanitizers/wiki/AddressSanitizer
+
+https://wizardforcel.gitbooks.io/100-gcc-tips/content/address-sanitizer.html
